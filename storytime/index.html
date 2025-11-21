@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StoryTime by CypherNex</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050b1a;
+      --card: #101827;
+      --accent: #fbbf24;
+      --accent-soft: #facc15;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827, #020617);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+    h1, h2, h3 {
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+    }
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .hero-card, .card {
+      background: radial-gradient(circle at top left, #1f2937, var(--card));
+      border-radius: 1.25rem;
+      padding: 1.25rem;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.8);
+      border: 1px solid rgba(148,163,184,0.25);
+      margin-bottom: 1.5rem;
+    }
+    .hero-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 800px) {
+      .hero-grid {
+        grid-template-columns: 2fr 1.5fr;
+      }
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(248,250,252,0.06);
+      color: var(--accent-soft);
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+    .pill span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.15rem;
+      height: 1.15rem;
+      border-radius: 999px;
+      background: rgba(250,204,21,0.12);
+      font-size: 0.7rem;
+    }
+    p {
+      margin: 0 0 0.6rem;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+    ul {
+      margin: 0.25rem 0 0.75rem 1.1rem;
+      padding: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    li { margin-bottom: 0.25rem; }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    button, .btn-link {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.15s ease;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #fbbf24, #f97316);
+      color: #111827;
+      box-shadow: 0 8px 18px rgba(248,250,252,0.2);
+    }
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(248,250,252,0.25);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(148,163,184,0.8);
+      color: var(--muted);
+    }
+    .btn-outline:hover:not(:disabled) {
+      background: rgba(15,23,42,0.9);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+    .badge.gold {
+      border-color: rgba(250,204,21,0.8);
+      color: var(--accent-soft);
+    }
+
+    .two-col {
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 900px) {
+      .two-col {
+        grid-template-columns: 1.2fr 1.8fr;
+      }
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 0.6rem;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    input[type="text"],
+    select,
+    textarea {
+      border-radius: 0.75rem;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.9);
+      padding: 0.45rem 0.7rem;
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 3.2rem;
+    }
+    input::placeholder, textarea::placeholder {
+      color: rgba(148,163,184,0.8);
+    }
+
+    .story-output {
+      border-radius: 1rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.95);
+      padding: 0.85rem 0.9rem;
+      max-height: 420px;
+      overflow: auto;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .story-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .story-tagline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .story-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.7rem;
+    }
+
+    .status {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .status.error { color: var(--danger); }
+    .status.success { color: var(--success); }
+
+    .packs-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    @media (min-width: 750px) {
+      .packs-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    .pack-card {
+      background: rgba(15,23,42,0.92);
+      border-radius: 1rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .pack-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+    .pack-price {
+      font-size: 0.9rem;
+      color: var(--accent-soft);
+    }
+    .pack-body {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 0.8rem;
+    }
+    .center { text-align: center; }
+
+    .dim {
+      opacity: 0.8;
+    }
+
+    /* Simple fullscreen permission overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.9), rgba(2,6,23,0.98));
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      padding: 1.25rem;
+    }
+    .overlay.active { display: flex; }
+    .overlay-card {
+      max-width: 420px;
+      width: 100%;
+      background: rgba(15,23,42,0.98);
+      border-radius: 1.25rem;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 1.25rem;
+      text-align: left;
+    }
+    .overlay-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="parent-overlay" class="overlay">
+    <div class="overlay-card">
+      <h2>For Grown-Ups First 🌙</h2>
+      <p class="small">
+        StoryTime by CypherNex is designed for children to enjoy
+        <strong>with</strong> a parent or grown-up. Stories are gentle, kid-safe,
+        and sometimes a little spooky-fun for older kids — but always end safe and warm.
+      </p>
+      <p class="small dim">
+        By continuing, you confirm you’re a parent/guardian or you have a parent’s
+        permission to use StoryTime.
+      </p>
+      <label class="small" style="display:flex;align-items:center;gap:0.4rem;margin:0.6rem 0;">
+        <input type="checkbox" id="parent-consent-checkbox" />
+        I understand and give permission to use StoryTime on this device.
+      </label>
+      <div class="btn-row" style="margin-top:0.4rem;">
+        <button id="parent-consent-btn" class="btn-primary" disabled>
+          Continue to StoryTime
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="page">
+    <header>
+      <h1>StoryTime by CypherNex</h1>
+      <p class="subtitle">
+        Bedtime stories, tailored to your child – one tap away.
+      </p>
+    </header>
+
+    <section class="hero-card">
+      <div class="pill">
+        <span>★</span> Built by a dad for real-world bedtimes
+      </div>
+      <div class="hero-grid">
+        <div>
+          <h2>Custom stories without custom effort</h2>
+          <p>
+            Type in a few details (or tap Quick Story) and we’ll spin up
+            a cozy tale built around your kid – their age, favorite things,
+            and even tonight’s mood.
+          </p>
+          <p class="small dim">
+            All stories are kid-safe, age-aware, and can be silly, brave,
+            comforting, or even a little spooky for older kids (fun spooky,
+            never nightmare fuel).
+          </p>
+          <ul>
+            <li>Age-aware stories (0–5, 6–10, 11–13)</li>
+            <li>Quick Story mode – no form, just tap and listen</li>
+            <li>Optional fun-spooky mode for bigger kids</li>
+            <li>Read-aloud button with your device’s voice</li>
+          </ul>
+          <div class="btn-row">
+            <button class="btn-primary" id="scroll-to-generator">
+              Jump to Story Generator
+            </button>
+            <button class="btn-outline" id="scroll-to-packs">
+              View Story Packs &amp; Options
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Tonight’s Sample Setup</h3>
+            <p class="small dim" id="sample-setup">
+              Name: Felix, 8 &nbsp;•&nbsp; Loves: foxes &amp; teal<br />
+              Tone: Brave + cozy landing<br />
+              Length: 7–10 minutes
+            </p>
+            <div>
+              <span class="badge gold">TTS-friendly</span>
+              <span class="badge">Print / Save as PDF</span>
+              <span class="badge">One-tap Quick Story</span>
+            </div>
+            <p class="small" style="margin-top:0.7rem;">
+              This is the kind of “just right” story we aim for each night:
+              soothing, imaginative, and short enough that everyone
+              actually gets to sleep.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>How StoryTime Works</h2>
+      <div class="two-col">
+        <div>
+          <ol class="small" style="margin-left:1.1rem;">
+            <li>Tap <strong>Quick Story</strong> or enter a few details.</li>
+            <li>We generate a fresh story (or pick one from the free library).</li>
+            <li>Hit <strong>Read Aloud</strong> and let the story play.</li>
+          </ol>
+          <p class="small dim">
+            You get a library of free stories to start, plus one free AI-custom
+            story per day on this device. Later, you can unlock Story Packs and
+            custom tales if you want more.
+          </p>
+        </div>
+        <div>
+          <p class="small">
+            For now, everything runs right in your browser and through our API
+            in the background – no ChatGPT login needed, no tech skills required.
+          </p>
+          <p class="small dim">
+            As the service grows, we’ll add optional accounts, longer stories,
+            and a keepsake mode for printing your child’s favorite tales.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="generator" class="card">
+      <h2>Story Generator</h2>
+      <p class="small dim">
+        Fill in as much or as little as you like. You can always tap
+        “Quick Story” and let us choose for you.
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="childName">Child’s name (optional)</label>
+              <input type="text" id="childName" placeholder="Felicitee, Jamie, etc." />
+            </div>
+            <div class="field">
+              <label for="ageRange">Age range</label>
+              <select id="ageRange">
+                <option value="0-5">0–5 (very simple, soothing)</option>
+                <option value="6-10" selected>6–10 (adventure + cozy)</option>
+                <option value="11-13">11–13 (a bit more depth)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pronouns">Pronouns</label>
+              <select id="pronouns">
+                <option value="they" selected>They / them</option>
+                <option value="she">She / her</option>
+                <option value="he">He / him</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="favoriteColor">Favorite color (optional)</label>
+              <input type="text" id="favoriteColor" placeholder="Teal, purple, gold..." />
+            </div>
+            <div class="field">
+              <label for="favoriteThing">Favorite animal or thing (optional)</label>
+              <input type="text" id="favoriteThing" placeholder="Foxes, robots, dragons..." />
+            </div>
+            <div class="field">
+              <label for="setting">Setting</label>
+              <select id="setting">
+                <option value="cozy bedroom" selected>Cozy bedroom</option>
+                <option value="forest">Forest</option>
+                <option value="ocean">Ocean</option>
+                <option value="mountains">Mountains</option>
+                <option value="space">Space</option>
+                <option value="hometown">Their hometown</option>
+                <option value="custom">Custom (type below)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="customSetting">Custom setting (if chosen)</label>
+              <input type="text" id="customSetting" placeholder="A floating library in the sky..." />
+            </div>
+            <div class="field">
+              <label for="tone">Tone</label>
+              <select id="tone">
+                <option value="cozy">Cozy / sleepy</option>
+                <option value="silly">Silly / giggly</option>
+                <option value="brave">Brave / confidence boost</option>
+                <option value="healing">Healing / comfort</option>
+                <option value="spooky">Spooky-fun (for older kids)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="length">Story length</label>
+              <select id="length">
+                <option value="short">Short (3–5 minutes)</option>
+                <option value="medium" selected>Medium (7–10 minutes)</option>
+                <option value="long">Long (10–15 minutes)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="focus">Tonight’s focus (optional)</label>
+              <select id="focus">
+                <option value="">Just for fun</option>
+                <option value="first day of school">First day of school</option>
+                <option value="rough day">Rough day / big feelings</option>
+                <option value="missing someone">Missing someone</option>
+                <option value="nightmares">Nightmares / trouble sleeping</option>
+                <option value="confidence">Confidence boost</option>
+                <option value="custom">Custom focus (type below)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="customFocus">Custom focus (if chosen)</label>
+              <input type="text" id="customFocus" placeholder="Example: worried about a test tomorrow..." />
+            </div>
+            <div class="field">
+              <label for="supportingCharacter">Supporting character (optional)</label>
+              <input type="text" id="supportingCharacter" placeholder="Little sister, pet dog, best friend..." />
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:0.8rem;">
+            <button id="quickStoryBtn" class="btn-outline">
+              Quick Story (No Setup)
+            </button>
+            <button id="generateStoryBtn" class="btn-primary">
+              Generate Story with These Details
+            </button>
+          </div>
+          <div id="generatorStatus" class="status"></div>
+        </div>
+        <div>
+          <h3>Tonight’s Story</h3>
+          <div id="storyOutput" class="story-output">
+            <span class="small dim">
+              Your bedtime story will appear here. You can listen, read along,
+              or print/save it as a PDF using your browser’s Print dialog.
+            </span>
+          </div>
+          <div class="story-controls">
+            <button id="readAloudBtn" class="btn-outline" disabled>
+              Read Aloud
+            </button>
+            <button id="stopReadAloudBtn" class="btn-outline" disabled>
+              Stop
+            </button>
+            <button id="printStoryBtn" class="btn-outline" disabled>
+              Print / Save as PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="free-library" class="card">
+      <h2>Free Bedtime Story Library</h2>
+      <p class="small dim">
+        Not in the mood to set anything up? Tap the button below and we’ll
+        pick a short, gentle story from our free starter library. We’ll rotate
+        through them so you don’t hear the same one twice in a row.
+      </p>
+      <div class="btn-row">
+        <button id="freeStoryBtn" class="btn-outline">
+          Free Bedtime Story (Quick Play)
+        </button>
+      </div>
+      <div id="freeStoryStatus" class="status"></div>
+    </section>
+
+    <section id="packs" class="card">
+      <h2>Story Packs &amp; Custom Options</h2>
+      <p class="small dim">
+        When you’re ready for more, you’ll be able to pick up downloadable packs
+        and custom stories. We’ll plug in your Payhip / PayPal links here.
+      </p>
+      <div class="packs-grid">
+        <div class="pack-card">
+          <div>
+            <div class="pack-title">Starter Bedtime Pack</div>
+            <div class="pack-price">Coming soon</div>
+            <p class="pack-body">
+              A small collection of cozy, ready-to-read stories in printable
+              PDF format. Perfect for nights when the Wi-Fi acts up.
+            </p>
+          </div>
+          <button class="btn-outline btn-link" disabled>
+            Available Soon
+          </button>
+        </div>
+        <div class="pack-card">
+          <div>
+            <div class="pack-title">Custom Story Keepsake</div>
+            <div class="pack-price">Coming soon</div>
+            <p class="pack-body">
+              Tell us about your child, and we’ll craft a longer, polished story
+              you can print, save, and revisit – a bedtime tradition in the making.
+            </p>
+          </div>
+          <button class="btn-outline btn-link" disabled>
+            Available Soon
+          </button>
+        </div>
+        <div class="pack-card">
+          <div>
+            <div class="pack-title">Seasonal &amp; Holiday Bundle</div>
+            <div class="pack-price">Coming soon</div>
+            <p class="pack-body">
+              Halloween not-too-spooky tales, winter cozies, and more themed packs
+              to match the seasons and big family moments.
+            </p>
+          </div>
+          <button class="btn-outline btn-link" disabled>
+            Available Soon
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="center small dim" style="margin-top:1.5rem;">
+      Built by CypherNex Systems · StoryTime MVP · v1
+    </footer>
+  </main>
+
+  <script>
+    // ==== CONFIG: plug your Payhip URLs in later if you want ====
+    const PAYHIP_STARTER_PACK_URL = ""; // e.g. "https://payhip.com/yourstarterpack"
+    const PAYHIP_CUSTOM_STORY_URL = ""; // e.g. "https://payhip.com/yourcustomstory"
+    const PAYHIP_SEASONAL_BUNDLE_URL = ""; // e.g. "https://payhip.com/yourseasonalbundle"
+
+    // ==== PARENTAL PERMISSION OVERLAY ====
+    const PARENT_KEY = "storytime_parent_ok_v1";
+    const overlay = document.getElementById("parent-overlay");
+    const parentCheckbox = document.getElementById("parent-consent-checkbox");
+    const parentBtn = document.getElementById("parent-consent-btn");
+
+    function showOverlayIfNeeded() {
+      try {
+        const ok = localStorage.getItem(PARENT_KEY);
+        if (ok === "1") return;
+      } catch (e) {}
+      overlay.classList.add("active");
+    }
+
+    parentCheckbox.addEventListener("change", () => {
+      parentBtn.disabled = !parentCheckbox.checked;
+    });
+
+    parentBtn.addEventListener("click", () => {
+      if (!parentCheckbox.checked) return;
+      try {
+        localStorage.setItem(PARENT_KEY, "1");
+      } catch (e) {}
+      overlay.classList.remove("active");
+    });
+
+    // ==== SIMPLE SCROLL BUTTONS ====
+    document.getElementById("scroll-to-generator").addEventListener("click", () => {
+      document.getElementById("generator").scrollIntoView({ behavior: "smooth" });
+    });
+    document.getElementById("scroll-to-packs").addEventListener("click", () => {
+      document.getElementById("packs").scrollIntoView({ behavior: "smooth" });
+    });
+
+    // ==== FREE STORY LIBRARY ====
+    const freeStoryBtn = document.getElementById("freeStoryBtn");
+    const freeStoryStatus = document.getElementById("freeStoryStatus");
+    const storyOutput = document.getElementById("storyOutput");
+    const readAloudBtn = document.getElementById("readAloudBtn");
+    const stopReadAloudBtn = document.getElementById("stopReadAloudBtn");
+    const printStoryBtn = document.getElementById("printStoryBtn");
+
+    // Tiny starter pool – you can add more as you go
+    const freeStories = [
+      {
+        title: "The Lantern in the Window",
+        tagline: "A soft light that waits for a tired little traveler.",
+        text: "On the quiet edge of a small town, there was a house with a lantern that never quite went out...\n\nEvery night, a gentle glow shone from the front window, just bright enough to guide sleepy feet and sleepy eyes back home. One evening, a tired kid named {{name}} trudged up the street after a long day...\n\n(Continue the story in your own voice, or let the AI version handle the full-length tales later.)"
+      },
+      {
+        title: "The Fox Who Collected Sunsets",
+        tagline: "A fox, a jar, and a sky that loved to be noticed.",
+        text: "In a forest where the trees whispered secrets to the wind, there lived a fox who believed sunsets were the most precious treasure in the world...\n\nEach evening, the fox carried an empty glass jar to the tallest hill and tried to catch the colors as they spilled across the sky..."
+      },
+      {
+        title: "The Spaceship Under the Bed",
+        tagline: "A dusty toy with one last flight left in it.",
+        text: "Under {{name}}’s bed, where socks and dust bunnies held secret meetings, there was a forgotten toy spaceship. Its paint was chipped, its stickers curled, but its tiny silver wings still remembered the feeling of flight...\n\nOne especially restless night, when sleep wouldn’t come, {{name}} leaned over the edge of the bed and whispered, 'I wish I could go somewhere quiet.' The spaceship flickered to life."
+      }
+    ];
+    let usedFreeIndices = [];
+
+    function fillPlaceholders(text, name) {
+      if (!name) return text.replaceAll("{{name}}", "your kid");
+      return text.replaceAll("{{name}}", name);
+    }
+
+    function getRandomFreeStory() {
+      if (usedFreeIndices.length === freeStories.length) {
+        usedFreeIndices = [];
+      }
+      let idx;
+      const triesMax = 10;
+      let tries = 0;
+      do {
+        idx = Math.floor(Math.random() * freeStories.length);
+        tries++;
+      } while (usedFreeIndices.includes(idx) && tries < triesMax);
+      usedFreeIndices.push(idx);
+      return freeStories[idx];
+    }
+
+    freeStoryBtn.addEventListener("click", () => {
+      const childName = document.getElementById("childName").value.trim();
+      const story = getRandomFreeStory();
+      const text = fillPlaceholders(story.text, childName);
+
+      renderStory({
+        title: story.title,
+        tagline: story.tagline,
+        text
+      });
+
+      freeStoryStatus.textContent = "Pulled a story from the free starter library.";
+      freeStoryStatus.className = "status success";
+    });
+
+    // ==== STORY RENDER & TTS / PRINT ====
+    let currentStory = null;
+    let currentUtterance = null;
+
+    function renderStory(story) {
+      currentStory = story;
+      const html = `
+        <div class="story-title">${story.title}</div>
+        <div class="story-tagline">${story.tagline}</div>
+        <div>${story.text.replace(/\n/g, "<br />")}</div>
+      `;
+      storyOutput.innerHTML = html;
+      readAloudBtn.disabled = false;
+      stopReadAloudBtn.disabled = false;
+      printStoryBtn.disabled = false;
+    }
+
+    function stopReading() {
+      if (window.speechSynthesis && currentUtterance) {
+        window.speechSynthesis.cancel();
+        currentUtterance = null;
+      }
+    }
+
+    readAloudBtn.addEventListener("click", () => {
+      if (!currentStory || !currentStory.text) return;
+      stopReading();
+      if (!("speechSynthesis" in window)) {
+        alert("Your browser doesn't support text-to-speech. You can still read the story or print it.");
+        return;
+      }
+      currentUtterance = new SpeechSynthesisUtterance(currentStory.text);
+      currentUtterance.rate = 0.9; // slightly slower for bedtime
+      window.speechSynthesis.speak(currentUtterance);
+    });
+
+    stopReadAloudBtn.addEventListener("click", () => {
+      stopReading();
+    });
+
+    printStoryBtn.addEventListener("click", () => {
+      if (!currentStory) return;
+      const w = window.open("", "_blank");
+      if (!w) return;
+      w.document.write(`
+        <html>
+          <head>
+            <title>${currentStory.title}</title>
+            <style>
+              body {
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                padding: 1.5rem;
+                line-height: 1.6;
+              }
+              h1 {
+                font-size: 1.4rem;
+                margin-bottom: 0.2rem;
+              }
+              .tagline {
+                color: #6b7280;
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+              }
+              pre {
+                white-space: pre-wrap;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${currentStory.title}</h1>
+            <div class="tagline">${currentStory.tagline}</div>
+            <pre>${currentStory.text}</pre>
+            <script>
+              window.onload = function () { window.print(); };
+            <\/script>
+          </body>
+        </html>
+      `);
+      w.document.close();
+    });
+
+    // ==== CUSTOM STORY (API) ====
+    const DAILY_KEY = "storytime_last_custom_date_v1";
+    const generatorStatus = document.getElementById("generatorStatus");
+    const generateStoryBtn = document.getElementById("generateStoryBtn");
+    const quickStoryBtn = document.getElementById("quickStoryBtn");
+
+    function todayKey() {
+      const d = new Date();
+      return d.toISOString().slice(0, 10); // YYYY-MM-DD
+    }
+
+    function canGenerateToday() {
+      try {
+        const last = localStorage.getItem(DAILY_KEY);
+        const t = todayKey();
+        return last !== t;
+      } catch (e) {
+        return true;
+      }
+    }
+
+    function markGeneratedToday() {
+      try {
+        localStorage.setItem(DAILY_KEY, todayKey());
+      } catch (e) {}
+    }
+
+    async function callStoryApi(payload) {
+      generatorStatus.textContent = "Generating your story...";
+      generatorStatus.className = "status";
+      generateStoryBtn.disabled = true;
+      quickStoryBtn.disabled = true;
+
+      try {
+        const res = await fetch("/api/storytime", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          throw new Error("API error: " + res.status);
+        }
+        const data = await res.json();
+        if (!data || !data.storyText) {
+          throw new Error("Unexpected response format.");
+        }
+        renderStory({
+          title: data.title || "Tonight’s Story",
+          tagline: data.tagline || "A bedtime story just for this moment.",
+          text: data.storyText
+        });
+        generatorStatus.textContent = "Story generated successfully. You can listen, read, or print/save it.";
+        generatorStatus.className = "status success";
+        markGeneratedToday();
+      } catch (err) {
+        console.error(err);
+        generatorStatus.textContent =
+          "We couldn't reach the story server. Try again in a bit, or use the free story library below.";
+        generatorStatus.className = "status error";
+      } finally {
+        generateStoryBtn.disabled = false;
+        quickStoryBtn.disabled = false;
+      }
+    }
+
+    function collectFormValues() {
+      const childName = document.getElementById("childName").value.trim();
+      const ageRange = document.getElementById("ageRange").value;
+      const pronouns = document.getElementById("pronouns").value;
+      const favoriteColor = document.getElementById("favoriteColor").value.trim();
+      const favoriteThing = document.getElementById("favoriteThing").value.trim();
+      const setting = document.getElementById("setting").value;
+      const customSetting = document.getElementById("customSetting").value.trim();
+      const length = document.getElementById("length").value;
+      const tone = document.getElementById("tone").value;
+      const focus = document.getElementById("focus").value;
+      const customFocus = document.getElementById("customFocus").value.trim();
+      const supportingCharacter = document.getElementById("supportingCharacter").value.trim();
+
+      let finalSetting = setting === "custom" && customSetting ? customSetting : setting;
+      let finalFocus = focus === "custom" && customFocus ? customFocus : focus;
+
+      return {
+        childName,
+        ageRange,
+        pronouns,
+        favoriteColor,
+        favoriteThing,
+        setting: finalSetting,
+        tone,
+        length,
+        focus: finalFocus,
+        customFocus,
+        supportingCharacter
+      };
+    }
+
+    function randomChoice(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function buildQuickPayload() {
+      // Use last form state if possible; otherwise create gentle defaults
+      const base = collectFormValues();
+      const ageRange = base.ageRange || "6-10";
+
+      const tones = ["cozy", "silly", "brave", "healing", "spooky"];
+      const lengths = ["short", "medium"];
+      const settings = ["cozy bedroom", "forest", "space", "ocean", "mountains", "hometown"];
+
+      return {
+        childName: base.childName || "",
+        ageRange,
+        pronouns: base.pronouns || "they",
+        favoriteColor: base.favoriteColor || "",
+        favoriteThing: base.favoriteThing || "",
+        setting: base.setting && base.setting !== "custom" ? base.setting : randomChoice(settings),
+        tone: base.tone || randomChoice(tones),
+        length: base.length || randomChoice(lengths),
+        focus: base.focus || "",
+        customFocus: base.customFocus || "",
+        supportingCharacter: base.supportingCharacter || ""
+      };
+    }
+
+    generateStoryBtn.addEventListener("click", () => {
+      if (!canGenerateToday()) {
+        generatorStatus.textContent =
+          "You’ve already used today’s free custom story on this device. Come back tomorrow, or use the free library below.";
+        generatorStatus.className = "status error";
+        return;
+      }
+      const payload = collectFormValues();
+      callStoryApi({ mode: "detailed", ...payload });
+    });
+
+    quickStoryBtn.addEventListener("click", () => {
+      if (!canGenerateToday()) {
+        generatorStatus.textContent =
+          "You’ve already used today’s free custom story on this device. Come back tomorrow, or use the free library below.";
+        generatorStatus.className = "status error";
+        return;
+      }
+      const payload = buildQuickPayload();
+      callStoryApi({ mode: "quick", ...payload });
+    });
+
+    // Init
+    showOverlayIfNeeded();
+  </script>
+</body>
+</html>
