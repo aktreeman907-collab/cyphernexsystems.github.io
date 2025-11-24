@@ -1,179 +1,1421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StoryTime by CypherNex</title>
+  <meta charset="UTF-8" />
+  <title>StoryTime — Instant AI Bedtime Stories</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-dark: #050816;
+      --bg-card: rgba(10, 18, 40, 0.96);
+      --accent: #ffd140;
+      --accent-soft: #ffeb8a;
+      --text-main: #f9fbff;
+      --text-muted: #a5b4cf;
+      --danger: #ff5c5c;
+      --border-soft: rgba(255, 255, 255, 0.06);
+      --radius-lg: 20px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.6);
+      --max-width: 960px;
+    }
 
-    <style>
-        body {
-            background: #0d0d0d;
-            color: white;
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        h1 {
-            margin-top: 2rem;
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at 10% 20%, #1a2340 0, #050816 55%, #02030a 100%);
+      background-attachment: fixed;
+    }
 
-        h2 {
-            margin-top: 2.5rem;
-            font-size: 1.8rem;
-            border-bottom: 1px solid #444;
-            padding-bottom: .5rem;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    body::before {
+      /* subtle star field */
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.7), transparent),
+        radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(1px 1px at 30% 80%, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 60% 60%, rgba(255, 255, 255, 0.5), transparent);
+      opacity: 0.26;
+      z-index: -1;
+    }
 
-        .button-block {
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: #111;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.05);
-        }
+    .page {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 24px 16px 64px;
+    }
 
-        .paypal-title {
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
+    header {
+      margin-bottom: 24px;
+    }
 
-        img.cards {
-            margin-top: .5rem;
-        }
-    </style>
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      color: var(--accent-soft);
+      border: 1px solid rgba(255, 209, 64, 0.35);
+      margin-bottom: 12px;
+    }
+
+    .hero-pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #4ade80;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.9);
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.3fr);
+      gap: 20px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .hero-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-text h1 {
+      font-size: clamp(1.9rem, 4vw, 2.4rem);
+      margin: 0 0 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-text h1 span {
+      color: var(--accent);
+    }
+
+    .hero-text p {
+      margin: 0;
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    .hero-art {
+      justify-self: center;
+    }
+
+    .hero-art svg {
+      width: 180px;
+      max-width: 100%;
+      filter: drop-shadow(0 18px 35px rgba(0, 0, 0, 0.75));
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 16px 20px;
+      backdrop-filter: blur(22px);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+    }
+
+    .card-subtitle {
+      margin: 0 0 12px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 720px) {
+      .form-grid.two-col {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      padding: 10px 12px;
+      background: rgba(9, 13, 28, 0.9);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .field textarea {
+      border-radius: 16px;
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: rgba(255, 209, 64, 0.6);
+      box-shadow: 0 0 0 1px rgba(255, 209, 64, 0.4);
+      background: rgba(11, 18, 40, 0.95);
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-outline {
+      border-radius: var(--radius-pill);
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: transform 0.06s ease, box-shadow 0.06s ease, background 0.1s ease, color 0.1s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ffd140, #ffb400);
+      color: #1b1300;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent-soft);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.09);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-icon {
+      font-size: 1.1rem;
+    }
+
+    .limit-message {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--danger);
+    }
+
+    .story-box {
+      border-radius: 18px;
+      border: 1px solid var(--border-soft);
+      background: radial-gradient(circle at 0 0, rgba(255, 209, 64, 0.12), rgba(8, 12, 32, 0.96));
+      padding: 16px 14px 14px;
+      min-height: 160px;
+      font-size: 0.96rem;
+      line-height: 1.55;
+      color: var(--text-main);
+      white-space: pre-wrap;
+    }
+
+    .story-placeholder {
+      color: var(--text-muted);
+    }
+
+    .story-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .pill-tag {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 3px 9px;
+      background: rgba(6, 10, 26, 0.9);
+    }
+
+    .output-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    /* Library section */
+    .library-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 0.87rem;
+    }
+
+    @media (min-width: 720px) {
+      .library-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .library-item {
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 10px 11px;
+      background: rgba(9, 13, 30, 0.96);
+      cursor: pointer;
+      transition: border 0.12s ease, transform 0.06s ease, background 0.12s ease;
+    }
+
+    .library-item:hover {
+      border-color: rgba(255, 209, 64, 0.55);
+      background: rgba(15, 22, 48, 0.98);
+      transform: translateY(-1px);
+    }
+
+    .library-item-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--accent-soft);
+    }
+
+    .library-item-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Pricing / PayPal cards */
+    #pricing {
+      margin-top: 8px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 720px) {
+      .pricing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .pricing-card {
+      background: radial-gradient(circle at 0 0, rgba(255, 209, 64, 0.15), rgba(7, 9, 26, 0.97));
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.7);
+    }
+
+    .pricing-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .pricing-price {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--accent-soft);
+    }
+
+    .paypal-snippet {
+      margin-top: 4px;
+    }
+
+    .disclaimer {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      margin-top: 16px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--accent-soft);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <header>
+      <div class="hero-pill">
+        <span class="dot"></span>
+        One free bedtime story per kid, per day – right from your browser.
+      </div>
 
-    <h1>StoryTime — Instant AI Bedtime Stories</h1>
-
-    <!-- ======================== SHORT STORY ======================== -->
-    <div class="button-block">
-        <div class="paypal-title">Short Story — $0.99</div>
-
-        <div>
-            <style>.pp-2AMCMQHMGC2Z8{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;cursor:pointer;}</style>
-            <form action="https://www.paypal.com/ncp/payment/2AMCMQHMGC2Z8" method="post" target="_blank" style="display:inline-grid;justify-items:center;gap:0.5rem;">
-                <input class="pp-2AMCMQHMGC2Z8" type="submit" value="Buy Now" />
-                <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" class="cards"/>
-            </form>
+      <div class="hero-layout">
+        <div class="hero-text">
+          <h1><span>StoryTime</span> — Instant AI Bedtime Stories</h1>
+          <p>
+            Fill in a few details about your kiddo and their world, or tap “Quick Story”
+            when you’re exhausted. You’ll get a cozy, custom bedtime story on demand –
+            and parents who want more can unlock instant bundles or unlimited access below.
+          </p>
         </div>
-    </div>
 
-    <!-- ======================== MEDIUM STORY ======================== -->
-    <div class="button-block">
-        <div class="paypal-title">Medium Story — $1.49</div>
+        <div class="hero-art" aria-hidden="true">
+          <!-- Glowing open book -->
+          <svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="glow" cx="50%" cy="0%" r="80%">
+                <stop offset="0%" stop-color="#ffd140" stop-opacity="0.95"/>
+                <stop offset="40%" stop-color="#ffd140" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#000018" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="page" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                <stop offset="100%" stop-color="#f3f4ff" stop-opacity="0.9"/>
+              </linearGradient>
+              <linearGradient id="cover" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#111827"/>
+                <stop offset="100%" stop-color="#1f2937"/>
+              </linearGradient>
+            </defs>
 
-        <div>
-            <style>.pp-W56CVDP29HNPY{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;cursor:pointer;}</style>
-            <form action="https://www.paypal.com/ncp/payment/W56CVDP29HNPY" method="post" target="_blank" style="display:inline-grid;justify-items:center;gap:0.5rem;">
-                <input class="pp-W56CVDP29HNPY" type="submit" value="Buy Now" />
-                <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" class="cards"/>
-            </form>
+            <!-- glow -->
+            <ellipse cx="110" cy="40" rx="90" ry="60" fill="url(#glow)" />
+
+            <!-- left cover -->
+            <path d="M30 70 L100 50 L100 130 L30 150 Z" fill="url(#cover)" />
+            <!-- right cover -->
+            <path d="M120 50 L190 70 L190 150 L120 130 Z" fill="url(#cover)" />
+
+            <!-- left pages -->
+            <path d="M35 72 L105 52 L105 128 L35 146 Z" fill="url(#page)" />
+            <!-- right pages -->
+            <path d="M115 52 L185 72 L185 146 L115 128 Z" fill="url(#page)" />
+
+            <!-- spine highlight -->
+            <rect x="104" y="50" width="12" height="80"
+                  fill="#e5e7f9" opacity="0.9" rx="4"/>
+
+            <!-- little "words" on pages -->
+            <g stroke="#d1d5f0" stroke-width="1.1" stroke-linecap="round" opacity="0.8">
+              <path d="M45 80 H90" />
+              <path d="M45 90 H88" />
+              <path d="M45 100 H82" />
+              <path d="M45 110 H86" />
+              <path d="M127 80 H172" />
+              <path d="M130 90 H178" />
+              <path d="M134 100 H176" />
+              <path d="M130 110 H170" />
+            </g>
+
+            <!-- sparkles coming out of book -->
+            <g fill="#fef3c7" stroke="#fde68a" stroke-width="0.6">
+              <circle cx="80" cy="28" r="2.1"/>
+              <circle cx="140" cy="22" r="2.3"/>
+              <circle cx="112" cy="12" r="1.8"/>
+              <circle cx="60" cy="18" r="1.6"/>
+              <circle cx="165" cy="32" r="1.6"/>
+            </g>
+          </svg>
         </div>
-    </div>
+      </div>
+    </header>
 
-    <!-- ======================== LONG STORY ======================== -->
-    <div class="button-block">
-        <div class="paypal-title">Long Story — $1.99</div>
+    <main>
+      <!-- STORY BUILDER -->
+      <section class="card" id="builder">
+        <h2>Customize Tonight’s Story</h2>
+        <p class="card-subtitle">
+          These details help shape the story. You get <strong>one free generated story per day</strong>
+          on this device. After that, you can still use the free library or upgrade below.
+        </p>
 
-        <div>
-            <style>.pp-Z3KH75KY7EGSC{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;cursor:pointer;}</style>
-            <form action="https://www.paypal.com/ncp/payment/Z3KH75KY7EGSC" method="post" target="_blank" style="display:inline-grid;justify-items:center;gap:0.5rem;">
-                <input class="pp-Z3KH75KY7EGSC" type="submit" value="Buy Now" />
-                <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" class="cards"/>
-            </form>
+        <div class="form-grid">
+          <div class="field">
+            <label for="childName">Child’s name</label>
+            <input id="childName" type="text" placeholder="Felicitee, Jay, Mateo..." />
+            <div class="hint">Used for the main hero of the story.</div>
+          </div>
+
+          <div class="field">
+            <label for="childAge">Age (optional)</label>
+            <input id="childAge" type="number" min="1" max="14" placeholder="7" />
+            <div class="hint">Helps tune the tone &amp; complexity.</div>
+          </div>
         </div>
-    </div>
 
-    <!-- ======================== BUNDLE OF 5 ======================== -->
-    <div class="button-block">
-        <div class="paypal-title">Bundle of 5 — $3.99</div>
+        <div class="form-grid two-col" style="margin-top: 8px;">
+          <div class="field">
+            <label for="tone">Tone</label>
+            <select id="tone">
+              <option value="silly and giggly">Silly / giggly</option>
+              <option value="soft and sleepy">Soft &amp; sleepy</option>
+              <option value="brave and adventurous">Brave / adventurous</option>
+              <option value="gentle and encouraging">Gentle &amp; encouraging</option>
+              <option value="magical and dreamy">Magical / dreamy</option>
+            </select>
+          </div>
 
-        <div>
-            <style>.pp-8RDSNCE864ZA6{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;cursor:pointer;}</style>
-            <form action="https://www.paypal.com/ncp/payment/8RDSNCE864ZA6" method="post" target="_blank" style="display:inline-grid;justify-items:center;gap:0.5rem;">
-                <input class="pp-8RDSNCE864ZA6" type="submit" value="Buy Now" />
-                <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" class="cards"/>
-            </form>
+          <div class="field">
+            <label for="length">Story length</label>
+            <select id="length">
+              <option value="short">Short (3–5 minutes)</option>
+              <option value="medium" selected>Medium (7–10 minutes)</option>
+              <option value="long">Long (10–15 minutes)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="setting">Custom setting (if chosen)</label>
+            <select id="setting">
+              <option value="">Surprise me</option>
+              <option value="a cozy cabin in the snowy Alaska woods">
+                Cozy cabin in snowy Alaska
+              </option>
+              <option value="a pirate ship sailing through the northern lights">
+                Pirate ship under the northern lights
+              </option>
+              <option value="a floating sky island full of friendly dragons">
+                Floating dragon island
+              </option>
+              <option value="a secret magic garden behind your house">
+                Magic garden
+              </option>
+              <option value="a crystal city under the ocean">
+                Crystal city under the ocean
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="focus">Tonight’s focus (optional)</label>
+            <select id="focus">
+              <option value="">Just for fun</option>
+              <option value="feeling safe at night">Feeling safe at night</option>
+              <option value="being brave at school tomorrow">Brave for school tomorrow</option>
+              <option value="trying new foods">Trying new foods</option>
+              <option value="being kind to siblings and friends">Being kind to siblings</option>
+              <option value="having big feelings but calming down gently">
+                Calming big feelings
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="customFocus">Custom focus (if chosen)</label>
+            <input
+              id="customFocus"
+              type="text"
+              placeholder="Example: worried about a test tomorrow..."
+            />
+          </div>
+
+          <div class="field">
+            <label for="supporting">
+              Supporting character (optional)
+            </label>
+            <input
+              id="supporting"
+              type="text"
+              placeholder="Little sister, pet dog, best friend..."
+            />
+          </div>
         </div>
-    </div>
 
-    <!-- ======================== BUNDLE OF 10 ======================== -->
-    <div class="button-block">
-        <div class="paypal-title">Bundle of 10 — $7.99</div>
-
-        <div>
-            <style>.pp-RJBRQZ5VDFNGA{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;cursor:pointer;}</style>
-            <form action="https://www.paypal.com/ncp/payment/RJBRQZ5VDFNGA" method="post" target="_blank" style="display:inline-grid;justify-items:center;gap:0.5rem;">
-                <input class="pp-RJBRQZ5VDFNGA" type="submit" value="Buy Now" />
-                <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" class="cards"/>
-            </form>
+        <div class="btn-row">
+          <button class="btn-primary" id="generateBtn">
+            <span class="btn-icon">✨</span>
+            Generate Story with These Details
+          </button>
+          <button class="btn-secondary" id="quickBtn">
+            Quick Story (No Setup)
+          </button>
         </div>
-    </div>
 
-    <!-- ======================== UNLIMITED MONTHLY ======================== -->
-    <div class="button-block">
-        <div class="paypal-title">Unlimited StoryTime — $19.99/mo</div>
+        <div class="limit-message" id="limitMessage"></div>
+      </section>
 
-        <div id="paypal-button-container-P-7AG37489BB000994CNERGJGQ"></div>
-        <script src="https://www.paypal.com/sdk/js?client-id=AfeZ9jL0r0PiBpZmD4UXx_MWNjDm4jsQSWeShUyEIIK9nqFPvuMtqvYgUBm2Y5Py5gj4u8jwbeTOvLuU&vault=true&intent=subscription"></script>
+      <!-- OUTPUT -->
+      <section class="card" id="output">
+        <h2>Tonight’s Story</h2>
+        <p class="card-subtitle">
+          Your story appears below. You can listen with Read Aloud, read along,
+          or print/save it as a PDF using your browser’s print dialog.
+        </p>
 
-        <script>
-            paypal.Buttons({
-                style: {
-                    shape: 'rect',
-                    color: 'gold',
-                    layout: 'vertical',
-                    label: 'subscribe'
-                },
-                createSubscription: function(data, actions) {
-                    return actions.subscription.create({
-                        plan_id: 'P-7AG37489BB000994CNERGJGQ'
-                    });
-                },
-                onApprove: function(data) {
-                    alert("Subscription Activated: " + data.subscriptionID);
-                }
-            }).render('#paypal-button-container-P-7AG37489BB000994CNERGJGQ');
-        </script>
-    </div>
+        <div class="story-box" id="storyBox">
+          <div class="story-placeholder" id="storyPlaceholder">
+            Your bedtime story will appear here.
+            Start by filling in a few details above, or tap
+            <strong>Quick Story</strong> for an instant tale.
+          </div>
+        </div>
 
-    <!-- ======================== FAMILY UNLIMITED ======================== -->
-    <div class="button-block">
-        <div class="paypal-title">Unlimited Family Subscription — $29.99/mo</div>
+        <div class="story-meta">
+          <div>
+            <span class="pill-tag" id="metaLength">Length: –</span>
+            <span class="pill-tag" id="metaTone">Tone: –</span>
+          </div>
+          <div id="metaFreeUse">
+            Free stories left today: <strong id="freeCountLabel">1</strong>
+          </div>
+        </div>
 
-        <div id="paypal-button-container-P-5WR418139G939580ENERGPZY"></div>
-        <script>
-            paypal.Buttons({
-                style: {
-                    shape: 'rect',
-                    color: 'gold',
-                    layout: 'vertical',
-                    label: 'subscribe'
-                },
-                createSubscription: function(data, actions) {
-                    return actions.subscription.create({
-                        plan_id: 'P-5WR418139G939580ENERGPZY'
-                    });
-                },
-                onApprove: function(data) {
-                    alert("Family Subscription Activated: " + data.subscriptionID);
-                }
-            }).render('#paypal-button-container-P-5WR418139G939580ENERGPZY');
-        </script>
-    </div>
+        <div class="output-buttons">
+          <button class="btn-outline" id="readBtn">
+            ▶ Read Aloud
+          </button>
+          <button class="btn-outline" id="stopBtn">
+            ⏹ Stop
+          </button>
+          <button class="btn-outline" id="printBtn">
+            📄 Print / Save as PDF
+          </button>
+        </div>
+      </section>
 
+      <!-- LIBRARY -->
+      <section class="card" id="library">
+        <h2>Free Story Library</h2>
+        <p class="card-subtitle">
+          Ran out of free AI stories for today on this device? Tap one of these
+          pre-written favorites and it will load directly into the story box.
+        </p>
 
+        <div class="library-list" id="libraryList">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- PRICING / PAYPAL -->
+      <section class="card" id="pricing">
+        <h2>Support StoryTime &amp; Unlock More Magic</h2>
+        <p class="card-subtitle">
+          Keep using one free story per day forever. When you’re ready for more,
+          grab a single story, a bundle pack, or go unlimited with a monthly pass.
+          All payments are processed securely by PayPal.
+        </p>
+
+        <div class="pricing-grid">
+          <!-- Short Story -->
+          <div class="pricing-card">
+            <h3>Short Story — $0.99</h3>
+            <div class="pricing-price">Perfect for quick tuck-ins and nap times.</div>
+            <div class="paypal-snippet">
+              <div>
+                <style>
+                  .pp-2AMCMQHMGC2Z8 {
+                    text-align: center;
+                    border: none;
+                    border-radius: 0.25rem;
+                    min-width: 11.625rem;
+                    padding: 0 2rem;
+                    height: 2.625rem;
+                    font-weight: bold;
+                    background-color: #ffd140;
+                    color: #000000;
+                    font-family: "Helvetica Neue", Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.25rem;
+                    cursor: pointer;
+                  }
+                </style>
+                <form
+                  action="https://www.paypal.com/ncp/payment/2AMCMQHMGC2Z8"
+                  method="post"
+                  target="_blank"
+                  style="
+                    display: inline-grid;
+                    justify-items: center;
+                    align-content: start;
+                    gap: 0.5rem;
+                  "
+                >
+                  <input
+                    class="pp-2AMCMQHMGC2Z8"
+                    type="submit"
+                    value="Buy Now"
+                  />
+                  <img
+                    src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg"
+                    alt="cards"
+                  />
+                  <section style="font-size: 0.75rem;">
+                    Powered by
+                    <img
+                      src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg"
+                      alt="paypal"
+                      style="height: 0.875rem; vertical-align: middle;"
+                    />
+                  </section>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medium Story -->
+          <div class="pricing-card">
+            <h3>Medium Story — $1.49</h3>
+            <div class="pricing-price">Average bedtime, full adventure.</div>
+            <div class="paypal-snippet">
+              <div>
+                <style>
+                  .pp-W56CVDP29HNPY {
+                    text-align: center;
+                    border: none;
+                    border-radius: 0.25rem;
+                    min-width: 11.625rem;
+                    padding: 0 2rem;
+                    height: 2.625rem;
+                    font-weight: bold;
+                    background-color: #ffd140;
+                    color: #000000;
+                    font-family: "Helvetica Neue", Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.25rem;
+                    cursor: pointer;
+                  }
+                </style>
+                <form
+                  action="https://www.paypal.com/ncp/payment/W56CVDP29HNPY"
+                  method="post"
+                  target="_blank"
+                  style="
+                    display: inline-grid;
+                    justify-items: center;
+                    align-content: start;
+                    gap: 0.5rem;
+                  "
+                >
+                  <input
+                    class="pp-W56CVDP29HNPY"
+                    type="submit"
+                    value="Buy Now"
+                  />
+                  <img
+                    src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg"
+                    alt="cards"
+                  />
+                  <section style="font-size: 0.75rem;">
+                    Powered by
+                    <img
+                      src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg"
+                      alt="paypal"
+                      style="height: 0.875rem; vertical-align: middle;"
+                    />
+                  </section>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Long Story -->
+          <div class="pricing-card">
+            <h3>Long Story — $1.99</h3>
+            <div class="pricing-price">
+              Extra-long nights, road trips, or “one more story, pleeease.”
+            </div>
+            <div class="paypal-snippet">
+              <div>
+                <style>
+                  .pp-Z3KH75KY7EGSC {
+                    text-align: center;
+                    border: none;
+                    border-radius: 0.25rem;
+                    min-width: 11.625rem;
+                    padding: 0 2rem;
+                    height: 2.625rem;
+                    font-weight: bold;
+                    background-color: #ffd140;
+                    color: #000000;
+                    font-family: "Helvetica Neue", Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.25rem;
+                    cursor: pointer;
+                  }
+                </style>
+                <form
+                  action="https://www.paypal.com/ncp/payment/Z3KH75KY7EGSC"
+                  method="post"
+                  target="_blank"
+                  style="
+                    display: inline-grid;
+                    justify-items: center;
+                    align-content: start;
+                    gap: 0.5rem;
+                  "
+                >
+                  <input
+                    class="pp-Z3KH75KY7EGSC"
+                    type="submit"
+                    value="Buy Now"
+                  />
+                  <img
+                    src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg"
+                    alt="cards"
+                  />
+                  <section style="font-size: 0.75rem;">
+                    Powered by
+                    <img
+                      src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg"
+                      alt="paypal"
+                      style="height: 0.875rem; vertical-align: middle;"
+                    />
+                  </section>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bundle of 5 -->
+          <div class="pricing-card">
+            <h3>Bundle of 5 — $3.99</h3>
+            <div class="pricing-price">
+              Great for busy weeks and sleepovers.
+            </div>
+            <div class="paypal-snippet">
+              <div>
+                <style>
+                  .pp-8RDSNCE864ZA6 {
+                    text-align: center;
+                    border: none;
+                    border-radius: 0.25rem;
+                    min-width: 11.625rem;
+                    padding: 0 2rem;
+                    height: 2.625rem;
+                    font-weight: bold;
+                    background-color: #ffd140;
+                    color: #000000;
+                    font-family: "Helvetica Neue", Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.25rem;
+                    cursor: pointer;
+                  }
+                </style>
+                <form
+                  action="https://www.paypal.com/ncp/payment/8RDSNCE864ZA6"
+                  method="post"
+                  target="_blank"
+                  style="
+                    display: inline-grid;
+                    justify-items: center;
+                    align-content: start;
+                    gap: 0.5rem;
+                  "
+                >
+                  <input
+                    class="pp-8RDSNCE864ZA6"
+                    type="submit"
+                    value="Buy Now"
+                  />
+                  <img
+                    src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg"
+                    alt="cards"
+                  />
+                  <section style="font-size: 0.75rem;">
+                    Powered by
+                    <img
+                      src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg"
+                      alt="paypal"
+                      style="height: 0.875rem; vertical-align: middle;"
+                    />
+                  </section>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bundle of 10 -->
+          <div class="pricing-card">
+            <h3>Bundle of 10 — $7.99</h3>
+            <div class="pricing-price">
+              Stock up for road trips and long winters.
+            </div>
+            <div class="paypal-snippet">
+              <div>
+                <style>
+                  .pp-RJBRQZ5VDFNGA {
+                    text-align: center;
+                    border: none;
+                    border-radius: 0.25rem;
+                    min-width: 11.625rem;
+                    padding: 0 2rem;
+                    height: 2.625rem;
+                    font-weight: bold;
+                    background-color: #ffd140;
+                    color: #000000;
+                    font-family: "Helvetica Neue", Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.25rem;
+                    cursor: pointer;
+                  }
+                </style>
+                <form
+                  action="https://www.paypal.com/ncp/payment/RJBRQZ5VDFNGA"
+                  method="post"
+                  target="_blank"
+                  style="
+                    display: inline-grid;
+                    justify-items: center;
+                    align-content: start;
+                    gap: 0.5rem;
+                  "
+                >
+                  <input
+                    class="pp-RJBRQZ5VDFNGA"
+                    type="submit"
+                    value="Buy Now"
+                  />
+                  <img
+                    src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg"
+                    alt="cards"
+                  />
+                  <section style="font-size: 0.75rem;">
+                    Powered by
+                    <img
+                      src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg"
+                      alt="paypal"
+                      style="height: 0.875rem; vertical-align: middle;"
+                    />
+                  </section>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unlimited Monthly -->
+          <div class="pricing-card">
+            <h3>Unlimited StoryTime — $19.99/mo</h3>
+            <div class="pricing-price">
+              Unlimited stories for one household. Great for nightly readers.
+            </div>
+            <div class="paypal-snippet">
+              <div id="paypal-button-container-P-7AG37489BB000994CNERGJGQ"></div>
+            </div>
+          </div>
+
+          <!-- Unlimited Family -->
+          <div class="pricing-card">
+            <h3>Unlimited Family Subscription — $29.99/mo</h3>
+            <div class="pricing-price">
+              For big families, co-parents, or shared households.
+            </div>
+            <div class="paypal-snippet">
+              <div id="paypal-button-container-P-5WR418139G939580ENERGPZY"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          Note: StoryTime is currently in early-access preview. All stories are generated on-device
+          using templates and your inputs. In a future update, AI models will power even richer,
+          dynamic stories while keeping your child’s info safe and private.
+        </p>
+      </section>
+
+      <footer>
+        StoryTime is a prototype experience by CypherNex Systems. Not medical, legal, or
+        educational advice. You’re always the grown-up in charge. ✨
+      </footer>
+    </main>
+  </div>
+
+  <!-- PayPal SDK once, used by both subscription buttons -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AfeZ9jL0r0PiBpZmD4UXx_MWNjDm4jsQSWeShUyEIIK9nqFPvuMtqvYgUBm2Y5Py5gj4u8jwbeTOvLuU&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+
+  <script>
+    // =========================
+    // DAILY FREE LIMIT
+    // =========================
+    const FREE_LIMIT_PER_DAY = 1;
+
+    function getUsageInfo() {
+      try {
+        const raw = localStorage.getItem("storytime_usage");
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function canGenerateStory() {
+      const today = new Date().toISOString().slice(0, 10);
+      const info = getUsageInfo();
+      if (!info || info.date !== today) return true;
+      return info.count < FREE_LIMIT_PER_DAY;
+    }
+
+    function recordGeneration() {
+      const today = new Date().toISOString().slice(0, 10);
+      let info = getUsageInfo();
+      if (!info || info.date !== today) {
+        info = { date: today, count: 0 };
+      }
+      info.count += 1;
+      localStorage.setItem("storytime_usage", JSON.stringify(info));
+    }
+
+    function updateLimitUI() {
+      const limitMessage = document.getElementById("limitMessage");
+      const freeCountLabel = document.getElementById("freeCountLabel");
+      const info = getUsageInfo();
+      const today = new Date().toISOString().slice(0, 10);
+
+      let used = 0;
+      if (info && info.date === today) used = info.count || 0;
+      const remaining = Math.max(FREE_LIMIT_PER_DAY - used, 0);
+
+      freeCountLabel.textContent = remaining;
+
+      if (remaining <= 0) {
+        limitMessage.innerHTML =
+          "You’ve used your free story for today on this device. " +
+          "You can still tap the sample stories below, or unlock more time with a bundle or subscription.";
+      } else if (used > 0) {
+        limitMessage.innerHTML =
+          "Nice! You can generate <strong>" +
+          remaining +
+          "</strong> more story today on this device.";
+      } else {
+        limitMessage.textContent =
+          "You have 1 free story today on this device. Make it a good one. 🙂";
+      }
+    }
+
+    // =========================
+    // STORY GENERATION LOGIC
+    // =========================
+    const storyBox = document.getElementById("storyBox");
+    const storyPlaceholder = document.getElementById("storyPlaceholder");
+    const metaLength = document.getElementById("metaLength");
+    const metaTone = document.getElementById("metaTone");
+
+    function buildStory(options) {
+      const {
+        childName,
+        age,
+        tone,
+        length,
+        setting,
+        focus,
+        customFocus,
+        supporting,
+      } = options;
+
+      const hero =
+        childName && childName.trim()
+          ? childName.trim()
+          : "your kiddo";
+
+      const ageLine = age
+        ? `${hero} is ${age} years old, which is the perfect age for big imaginations and even bigger dreams. `
+        : `${hero} has a mind that loves to wander just before sleep. `;
+
+      const chosenSetting =
+        setting ||
+        "a quiet place that seems to exist half in the real world and half in your dreams";
+
+      const focusText = customFocus || focus || "";
+      const focusLine = focusText
+        ? `Tonight, something important is swirling in ${hero}'s heart: ${focusText}. `
+        : "";
+
+      const helper = supporting
+        ? `Luckily, ${hero} isn’t alone. Joining the adventure is ${supporting.trim()}, who always seems to show up right when they’re needed most. `
+        : "";
+
+      const toneLine = `The story tonight will be ${tone}, wrapping the whole night in a feeling that feels just right. `;
+
+      const opening =
+        `On a night when the stars were especially bright, ${hero} lay in bed listening to the softest sounds of the world outside. ` +
+        ageLine +
+        toneLine +
+        focusLine +
+        `Somewhere just beyond the bedroom window, a doorway to ${chosenSetting} quietly shimmered into view.`;
+
+      const middleBits = [
+        `When ${hero} stepped through the doorway, the first thing they noticed was the air: it smelled like warm cocoa and clean blankets. Friendly lights twinkled like tiny fireflies, showing a path that seemed to be waiting just for them.`,
+        helper +
+          `${hero} and ${
+            supporting || "their new friends"
+          } followed the path until it opened into a clearing. In the center was something unexpected – a glowing lantern that changed colors to match whatever feelings were nearby. When ${hero} felt brave, the lantern glowed gold. When they felt unsure, it softened into a kind, gentle blue.`,
+        focusText
+          ? `As they walked, ${hero} thought about ${focusText}. The worry had been feeling heavy, like a backpack full of rocks. But in this place, worries turned into questions the lantern could answer, one warm color at a time. Each answer didn’t give away the future; it just showed ${hero} that they didn’t have to face it alone.`
+          : `${hero} didn’t have any big worries tonight, just a heart full of curiosity. So the lantern didn’t have to fix anything – it simply glowed in patterns that looked like giggles, high-fives, and sleepy hugs.`,
+      ];
+
+      const cozyMoment =
+        `They eventually found a spot that felt like it had been built just for them – a nest of soft pillows, woven from clouds and old bedtime stories. ${hero} climbed in and felt their body grow heavier in the happiest way, like the feeling of being tucked in by someone who loves you more than anything in the universe.`;
+
+      const closing =
+        `The lantern dimmed to a warm, sleepy gold. Every color it had shown tonight settled gently inside ${hero}'s chest, like tiny lights they could carry back home. ` +
+        `With one last look around ${chosenSetting}, ${hero} whispered thank you – for the comfort, the courage, and the gentle reminder that even on strange or busy days, rest is allowed and safe. ` +
+        `When their eyes opened again, they were back in their own bed. The room might have looked the same, but something inside felt softer, steadier, and ready for dreams. ` +
+        `And as sleep finally wrapped around them like a blanket, the stars outside seemed to blink in slow, content agreement.`;
+
+      // Adjust length
+      let body = "";
+      if (length === "short") {
+        body = middleBits[0] + " " + cozyMoment;
+      } else if (length === "medium") {
+        body = middleBits.join(" ") + " " + cozyMoment;
+      } else {
+        // long
+        const extra =
+          `${hero} and ${
+            supporting || "their companions"
+          } spent what felt like hours exploring little corners of this world. ` +
+          `They found a tiny library of glow-in-the-dark books, each one telling a different version of nights where kids overcame tough days and still found room to laugh. ` +
+          `Every time ${hero} turned a page, they felt another knot in their chest quietly loosen.`;
+        body = middleBits.join(" ") + " " + extra + " " + cozyMoment;
+      }
+
+      return opening + "\n\n" + body + "\n\n" + closing;
+    }
+
+    function getFormValues(useDefaults = false) {
+      if (useDefaults) {
+        return {
+          childName: "your kiddo",
+          age: "",
+          tone: "soft and sleepy",
+          length: "medium",
+          setting: "",
+          focus: "",
+          customFocus: "",
+          supporting: "",
+        };
+      }
+
+      return {
+        childName: document.getElementById("childName").value.trim(),
+        age: document.getElementById("childAge").value.trim(),
+        tone: document.getElementById("tone").value,
+        length: document.getElementById("length").value,
+        setting: document.getElementById("setting").value,
+        focus: document.getElementById("focus").value,
+        customFocus: document.getElementById("customFocus").value.trim(),
+        supporting: document.getElementById("supporting").value.trim(),
+      };
+    }
+
+    function setStory(text, options) {
+      storyPlaceholder.style.display = "none";
+      storyBox.textContent = text;
+
+      metaLength.textContent =
+        "Length: " +
+        (options.length === "short"
+          ? "Short (3–5 min)"
+          : options.length === "medium"
+          ? "Medium (7–10 min)"
+          : "Long (10–15 min)");
+      metaTone.textContent = "Tone: " + options.tone;
+    }
+
+    function handleGenerate(useDefaults = false) {
+      if (!canGenerateStory()) {
+        updateLimitUI();
+        return;
+      }
+      const options = getFormValues(useDefaults);
+      const story = buildStory(options);
+      setStory(story, options);
+      recordGeneration();
+      updateLimitUI();
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      handleGenerate(false);
+    });
+
+    document.getElementById("quickBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      handleGenerate(true);
+    });
+
+    // =========================
+    // READ ALOUD / PRINT
+    // =========================
+    let currentUtterance = null;
+
+    function readAloud() {
+      if (!("speechSynthesis" in window)) {
+        alert("Read Aloud is not supported on this device.");
+        return;
+      }
+      const text = storyBox.textContent.trim();
+      if (!text || storyPlaceholder.style.display !== "none") {
+        alert("Generate or select a story first.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      currentUtterance = new SpeechSynthesisUtterance(text);
+      currentUtterance.rate = 0.96;
+      currentUtterance.pitch = 1.02;
+      window.speechSynthesis.speak(currentUtterance);
+    }
+
+    function stopReading() {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    document.getElementById("readBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      readAloud();
+    });
+
+    document.getElementById("stopBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      stopReading();
+    });
+
+    document.getElementById("printBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      window.print();
+    });
+
+    // =========================
+    // FREE LIBRARY
+    // =========================
+    const libraryStories = [
+      {
+        title: "The Night the Northern Lights Came Inside",
+        blurb:
+          "A sleepy kid in Alaska discovers the northern lights can drift right into their bedroom ceiling.",
+        tone: "Soft & sleepy",
+        length: "Medium",
+        story: `On a bitter-cold night in Alaska, the sky outside the window was dancing. Green and purple ribbons of light rippled over the mountains, swaying like slow music. Inside the house, the heater hummed its gentle song while a kid named Star pulled the blanket up to their chin.
+
+Star had seen the northern lights before, but tonight they felt different—brighter, closer, almost curious. As Star blinked, one of the shimmering ribbons drifted lower... and lower... until a tiny piece of it slipped in through the tiniest crack in the window frame.
+
+Instead of being cold, the light felt warm and velvety, like the air right after a hug. It floated above Star’s bed, swishing back and forth, leaving little specks of color in the air that twinkled like fireflies.
+
+“Are you… lost?” Star whispered.
+
+The northern light gave no words, but it flickered kindly, as if to say, *I just wanted to visit.*
+
+Together they painted pictures on the ceiling—moose made of starlight, oceans made of velvet blue, and a tiny glowing version of Star curled up in bed, smiling. Every time Star felt a little scared of the dark corners of the room, the lights rushed over and painted something silly there instead.
+
+By the time Star’s eyes grew heavy, the lights had drawn a shimmering blanket across the ceiling that looked exactly like the sky outside. “Will you be there tomorrow?” Star murmured.
+
+The northern light dimmed, sliding gently back toward the window crack. It settled into the real sky again, leaving behind only the memory of warmth and a single glittering speck on Star’s pillow.
+
+In the morning, the speck was gone. But whenever Star looked up at the night sky after that, the lights always seemed to dip a little lower, just for them—like a quiet promise that they would never really face the night alone.`,
+      },
+      {
+        title: "The Secret Hammock Between Two Worlds",
+        blurb:
+          "A backyard hammock becomes a gateway between a tough day and a softer, kinder world.",
+        tone: "Gentle & encouraging",
+        length: "Short",
+        story: `There was a hammock in the backyard that nobody thought much about. It hung between two stubborn old trees that had stood through storms, snow, and a hundred small summers. But one afternoon, when everything felt too loud and too much, a kid named River trudged outside and flopped into the hammock with a sigh.
+
+The ropes creaked softly in reply, as if the hammock were saying, *I hear you.*
+
+As River stared up at the sky, something small but important happened. With every slow rock, the sounds of the neighborhood faded—the cars, the TV, the clinking dishes from the kitchen. In their place came a quieter world: the swoosh of leaves, the tiny tap of a bird landing on a branch, the whisper of wind sneaking through the grass.
+
+The more River rocked, the more this quiet world expanded. The clouds moved slower. The sky seemed deeper. The two trees on either side of the hammock felt less like wood and more like guardians, holding up the edges of a safe little pocket of time.
+
+River thought about the hard parts of the day: the mistake at school, the argument that left their chest tight, the feeling of not quite being enough. For a few minutes those thoughts poked at them like sharp stones… but the hammock never hurried them away. It just kept rocking, steady and patient.
+
+Eventually, the sharp stones turned into something else: questions, possibilities, tiny maybe-I-could-try-again-tomorrows. River realized they didn’t have to fix everything tonight. They just had to breathe, here, between the two old trees.
+
+When the porch light clicked on and someone called their name, River climbed out of the hammock feeling just a little lighter. The world hadn’t changed. But the space between the two trees had reminded them of something important:
+
+They were allowed to rest, even on days that didn’t feel perfect. Especially on days that didn’t feel perfect.`,
+      },
+      {
+        title: "Captain Pillowcase & The Midnight Rescue",
+        blurb:
+          "A silly superhero made of blankets helps chase away bedtime worries.",
+        tone: "Silly & giggly",
+        length: "Medium",
+        story: `Every night, right after teeth-brushing and exactly three sips of water, the bedtime worries showed up. They were not very big, but they were very good at acting bigger than they were. They whispered things like, “What if tomorrow is hard?” and “What if you can't fall asleep?”
+
+One night, as those worries gathered around the bed, a muffled *thump* came from the pile of clean laundry in the corner. Out popped a figure wearing a pillowcase as a cape and a pair of socks as heroic gloves.
+
+“Never fear!” the figure announced in a dramatically whisper-shout. “Captain Pillowcase is here!”
+
+The worries blinked. The kid in the bed sat up. Captain Pillowcase posed proudly on top of a folded blanket.
+
+“You seem… small,” one worry sniffed.
+
+“Small?” Captain Pillowcase gasped. “Why, I am the exact right size to fit in your backpack, your pocket, and your overactive imagination. Now! Which worry would like to be dramatically over-exaggerated and then gently squished first?”
+
+Before any of them could answer, Captain Pillowcase pointed at one and boomed, “You there! The ‘What if I mess up tomorrow?’ worry. Tell me, have you ever noticed that every superhero training montage is full of mistakes? Tripping! Falling! Dropping things! That’s the good part. That’s where the muscles grow!”
+
+The worry frowned. “Well… yes, but—”
+
+Captain Pillowcase leapt into the air (about eight inches) and landed with a wobble. “Behold! A flawless example of not-flawless. And yet, do I stop being Captain Pillowcase? I do not!”
+
+One by one, the worries were invited to say their lines out loud. Each time, Captain Pillowcase answered with something half-silly, half-true: that it was okay not to know everything, okay to ask for help, okay to be still learning.
+
+Eventually, the worries shrank down until they looked more like tiny doodles in the corner of a notebook than big, shadowy shapes.
+
+“Remember,” Captain Pillowcase said, tucking the blanket gently around the kid. “You don’t have to wrestle worries alone. Call me anytime. I accept payment in giggles, deep breaths, and the occasional extra pillow.”
+
+With that, Captain Pillowcase dove back into the laundry basket, where all the best heroes secretly live. The kid lay back, feeling tired in the way that meant sleep was finally close.
+
+The worries? They still existed. But they had been measured, teased, and gently squished into their proper size—and that made all the difference.`,
+      },
+    ];
+
+    function populateLibrary() {
+      const container = document.getElementById("libraryList");
+      container.innerHTML = "";
+      libraryStories.forEach((s, idx) => {
+        const div = document.createElement("div");
+        div.className = "library-item";
+        div.innerHTML = `
+          <div class="library-item-title">${s.title}</div>
+          <div class="library-item-meta">${s.tone} • ${s.length}</div>
+          <div>${s.blurb}</div>
+        `;
+        div.addEventListener("click", () => {
+          storyPlaceholder.style.display = "none";
+          storyBox.textContent = s.story;
+          metaLength.textContent = "Length: " + s.length;
+          metaTone.textContent = "Tone: " + s.tone;
+        });
+        container.appendChild(div);
+      });
+    }
+
+    // =========================
+    // PAYPAL SUBSCRIPTIONS
+    // =========================
+    if (window.paypal) {
+      paypal.Buttons({
+        style: {
+          shape: "rect",
+          color: "gold",
+          layout: "vertical",
+          label: "subscribe",
+        },
+        createSubscription: function (data, actions) {
+          return actions.subscription.create({
+            plan_id: "P-7AG37489BB000994CNERGJGQ",
+          });
+        },
+        onApprove: function (data, actions) {
+          alert(
+            "Thank you for subscribing! Subscription ID: " +
+              data.subscriptionID
+          );
+        },
+      }).render("#paypal-button-container-P-7AG37489BB000994CNERGJGQ");
+
+      paypal.Buttons({
+        style: {
+          shape: "rect",
+          color: "gold",
+          layout: "vertical",
+          label: "subscribe",
+        },
+        createSubscription: function (data, actions) {
+          return actions.subscription.create({
+            plan_id: "P-5WR418139G939580ENERGPZY",
+          });
+        },
+        onApprove: function (data, actions) {
+          alert(
+            "Thank you for subscribing to the Family plan! Subscription ID: " +
+              data.subscriptionID
+          );
+        },
+      }).render("#paypal-button-container-P-5WR418139G939580ENERGPZY");
+    }
+
+    // Init on load
+    populateLibrary();
+    updateLimitUI();
+  </script>
 </body>
 </html>
