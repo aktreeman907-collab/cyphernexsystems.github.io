@@ -643,6 +643,19 @@
           </div>
         </div>
 
+     
+        <!-- Voice selector -->
+        <div class="field" style="margin-top: 12px; max-width: 320px;">
+          <label for="voiceSelect">Narrator voice</label>
+          <select id="voiceSelect">
+            <option value="">System default</option>
+          </select>
+          <div class="hint">
+            Pick the calmest, least-nasally voice your device offers. 
+            This list comes from your browser.
+          </div>
+        </div>
+        
         <div class="output-buttons">
           <button class="btn-outline" id="readBtn">
             ▶ Read Aloud
@@ -1221,25 +1234,82 @@
       handleGenerate(true);
     });
 
-    // =========================
+        // =========================
     // READ ALOUD / PRINT
     // =========================
     let currentUtterance = null;
+    let availableVoices = [];
+    let selectedVoiceIndex = null;
+
+    const voiceSelect = document.getElementById("voiceSelect");
+
+    function loadVoices() {
+      if (!("speechSynthesis" in window)) return;
+
+      availableVoices = window.speechSynthesis.getVoices() || [];
+
+      // Clear current options (keep first "System default" option)
+      while (voiceSelect.options.length > 1) {
+        voiceSelect.remove(1);
+      }
+
+      availableVoices.forEach((v, i) => {
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(opt);
+      });
+
+      // Try to auto-pick a nice-ish voice the first time:
+      if (selectedVoiceIndex === null && availableVoices.length > 0) {
+        const preferred = availableVoices.findIndex(v =>
+          /female|woman|natural|google/i.test(v.name)
+        );
+        if (preferred >= 0) {
+          selectedVoiceIndex = preferred;
+          voiceSelect.value = String(preferred);
+        }
+      }
+    }
+
+    if ("speechSynthesis" in window) {
+      // Some browsers load voices asynchronously
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      loadVoices();
+    }
+
+    voiceSelect.addEventListener("change", () => {
+      const val = voiceSelect.value;
+      selectedVoiceIndex = val === "" ? null : parseInt(val, 10);
+    });
 
     function readAloud() {
       if (!("speechSynthesis" in window)) {
         alert("Read Aloud is not supported on this device.");
         return;
       }
+
       const text = storyBox.textContent.trim();
       if (!text || storyPlaceholder.style.display !== "none") {
         alert("Generate or select a story first.");
         return;
       }
+
       window.speechSynthesis.cancel();
+
       currentUtterance = new SpeechSynthesisUtterance(text);
-      currentUtterance.rate = 0.96;
-      currentUtterance.pitch = 1.02;
+
+      // Calm “nanny” settings – tweak these if it still sounds wild:
+      currentUtterance.rate = 0.9;   // slower = calmer
+      currentUtterance.pitch = 1.0;  // 1.0 is neutral
+
+      if (
+        selectedVoiceIndex !== null &&
+        availableVoices[selectedVoiceIndex]
+      ) {
+        currentUtterance.voice = availableVoices[selectedVoiceIndex];
+      }
+
       window.speechSynthesis.speak(currentUtterance);
     }
 
@@ -1248,6 +1318,7 @@
         window.speechSynthesis.cancel();
       }
     }
+
 
     document.getElementById("readBtn").addEventListener("click", function (e) {
       e.preventDefault();
