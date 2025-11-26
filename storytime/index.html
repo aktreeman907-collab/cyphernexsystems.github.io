@@ -24,24 +24,43 @@
       box-sizing: border-box;
     }
 
-      html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Helvetica Neue", Arial, sans-serif;
-  color: var(--text-main);
+     html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-main);
 
-  /* --- BACKGROUND FROM SCREENSHOT ADDED HERE --- */
-  background-image: url('https://i.imgur.com/rN9gQ1w.jpg');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-color: #0c1223; /* A fallback color */
-  background-attachment: fixed;
-  /* --------------------------------------------- */
+  /* Enhanced cosmic starry sky background */
+  background:
+    /* Vibrant nebula clouds - more intense colors */
+    radial-gradient(ellipse at 20% 10%, rgba(138, 43, 226, 0.4), transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 191, 255, 0.35), transparent 50%),
+    radial-gradient(ellipse at 15% 70%, rgba(255, 20, 147, 0.38), transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(255, 140, 0, 0.32), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(75, 0, 130, 0.25), transparent 60%),
+    
+    /* Dense starfield - multiple layers */
+    radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 90% 60%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 15% 85%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 40% 20%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 70% 40%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(2px 2px at 25% 60%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 95% 85%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 10% 45%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 45% 90%, rgba(255, 255, 255, 0.7), transparent),
+
+    /* Deep space base gradient */
+    radial-gradient(ellipse at 30% 30%, #0f1b3d 0%, #050816 50%, #020510 100%);
+
+  background-attachment: fixed;
+  background-size: cover;
 }
-
 
     
     .page {
