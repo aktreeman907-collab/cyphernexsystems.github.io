@@ -24,16 +24,21 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Helvetica Neue", Arial, sans-serif;
-      color: var(--text-main);
-      background: radial-gradient(circle at 10% 20%, #1a2340 0, #050816 55%, #02030a 100%);
-      background-attachment: fixed;
-    }
+   html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-main);
+
+  /* Deep space base gradient */
+  background:
+    radial-gradient(circle at 10% 0%, #1f2937 0, rgba(15, 23, 42, 0.95) 40%, #020617 100%);
+  background-color: #020617;
+  background-attachment: fixed;
+}
+
 
     body::before {
       /* subtle star field */
@@ -50,6 +55,23 @@
       z-index: -1;
     }
 
+     body::after {
+      /* soft nebula blobs behind everything */
+      content: "";
+      position: fixed;
+      inset: -10%;
+      pointer-events: none;
+      z-index: -1;
+      mix-blend-mode: screen;
+      opacity: 0.9;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(129, 140, 248, 0.28), transparent 55%),
+        radial-gradient(circle at 80% 10%, rgba(56, 189, 248, 0.24), transparent 55%),
+        radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.22), transparent 55%),
+        radial-gradient(circle at 85% 75%, rgba(245, 158, 11, 0.2), transparent 55%);
+    }
+
+    
     .page {
       max-width: var(--max-width);
       margin: 0 auto;
@@ -1234,7 +1256,7 @@
       handleGenerate(true);
     });
 
-        // =========================
+     // =========================
     // READ ALOUD / PRINT
     // =========================
     let currentUtterance = null;
@@ -1243,33 +1265,75 @@
 
     const voiceSelect = document.getElementById("voiceSelect");
 
-    function loadVoices() {
-      if (!("speechSynthesis" in window)) return;
+    function buildVoiceOptions() {
+      // Clear and add the default option
+      voiceSelect.innerHTML = "";
+      const defaultOpt = document.createElement("option");
+      defaultOpt.value = "";
+      defaultOpt.textContent = "System default (device chooses)";
+      voiceSelect.appendChild(defaultOpt);
 
-      availableVoices = window.speechSynthesis.getVoices() || [];
+      if (!availableVoices.length) return;
 
-      // Clear current options (keep first "System default" option)
-      while (voiceSelect.options.length > 1) {
-        voiceSelect.remove(1);
+      const recommendedGroup = document.createElement("optgroup");
+      recommendedGroup.label = "Recommended for bedtime";
+
+      const allGroup = document.createElement("optgroup");
+      allGroup.label = "All voices on this device";
+
+      // Pick up to 3 "nice" sounding English voices as recommended
+      const recommendedIndexes = [];
+      availableVoices.forEach((v, i) => {
+        if (
+          v.lang.toLowerCase().startsWith("en") &&
+          /female|woman|natural|online|neural/i.test(v.name) &&
+          recommendedIndexes.length < 3
+        ) {
+          recommendedIndexes.push(i);
+        }
+      });
+
+      // Fallback: if nothing matched, just take the first few voices
+      if (!recommendedIndexes.length) {
+        for (let i = 0; i < Math.min(3, availableVoices.length); i++) {
+          recommendedIndexes.push(i);
+        }
       }
 
+      // Add recommended voices
+      recommendedIndexes.forEach((i) => {
+        const v = availableVoices[i];
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = `${v.name} (${v.lang})`;
+        recommendedGroup.appendChild(opt);
+      });
+
+      // Add all voices (so people can pick “home”)
       availableVoices.forEach((v, i) => {
         const opt = document.createElement("option");
         opt.value = String(i);
         opt.textContent = `${v.name} (${v.lang})`;
-        voiceSelect.appendChild(opt);
+        allGroup.appendChild(opt);
       });
 
-      // Try to auto-pick a nice-ish voice the first time:
-      if (selectedVoiceIndex === null && availableVoices.length > 0) {
-        const preferred = availableVoices.findIndex(v =>
-          /female|woman|natural|google/i.test(v.name)
-        );
-        if (preferred >= 0) {
-          selectedVoiceIndex = preferred;
-          voiceSelect.value = String(preferred);
-        }
+      voiceSelect.appendChild(recommendedGroup);
+      voiceSelect.appendChild(allGroup);
+
+      // Auto-select first recommended the first time
+      if (selectedVoiceIndex === null && recommendedGroup.children.length) {
+        const firstVal = recommendedGroup.children[0].value;
+        selectedVoiceIndex = parseInt(firstVal, 10);
+        voiceSelect.value = firstVal;
+      } else if (selectedVoiceIndex !== null) {
+        voiceSelect.value = String(selectedVoiceIndex);
       }
+    }
+
+    function loadVoices() {
+      if (!("speechSynthesis" in window)) return;
+      availableVoices = window.speechSynthesis.getVoices() || [];
+      buildVoiceOptions();
     }
 
     if ("speechSynthesis" in window) {
@@ -1299,9 +1363,9 @@
 
       currentUtterance = new SpeechSynthesisUtterance(text);
 
-      // Calm “nanny” settings – tweak these if it still sounds wild:
+      // Calm “nanny” style
       currentUtterance.rate = 0.9;   // slower = calmer
-      currentUtterance.pitch = 1.0;  // 1.0 is neutral
+      currentUtterance.pitch = 1.0;  // neutral pitch
 
       if (
         selectedVoiceIndex !== null &&
@@ -1318,7 +1382,6 @@
         window.speechSynthesis.cancel();
       }
     }
-
 
     document.getElementById("readBtn").addEventListener("click", function (e) {
       e.preventDefault();
