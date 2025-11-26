@@ -42,35 +42,45 @@
     }
     
     /* tiny star field */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.7), transparent),
-        radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.6), transparent),
-        radial-gradient(1px 1px at 30% 80%, rgba(255, 255, 255, 0.4), transparent),
-        radial-gradient(1px 1px at 60% 60%, rgba(255, 255, 255, 0.5), transparent);
-      opacity: 0.3;
-      z-index: 0;
-    }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 78% 12%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 32% 72%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 64% 66%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 50% 40%, rgba(255, 255, 255, 0.4), transparent);
+  opacity: 0.32;       /* brightness of stars */
+  z-index: -1;         /* behind everything else */
+}
+
     
-    /* glowing nebula blobs */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: -10%;
-      pointer-events: none;
-      z-index: 0;
-      mix-blend-mode: screen;
-      opacity: 0.9;
-      background:
-        radial-gradient(circle at 15% 15%, rgba(129, 140, 248, 0.28), transparent 55%),
-        radial-gradient(circle at 80% 10%, rgba(56, 189, 248, 0.24), transparent 55%),
-        radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.22), transparent 55%),
-        radial-gradient(circle at 85% 75%, rgba(245, 158, 11, 0.2), transparent 55%);
-    }
+    /* glowing nebula band */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -12%;
+  pointer-events: none;
+  z-index: -2;
+  mix-blend-mode: screen;
+  opacity: 0.65;  /* overall strength of the nebula */
+
+  background:
+    /* warm glow near the bottom center (like your old screenshot) */
+    radial-gradient(circle at 50% 115%, rgba(251, 191, 36, 0.45), transparent 68%),
+
+    /* cool violet cloud top-left */
+    radial-gradient(circle at 18% 18%, rgba(129, 140, 248, 0.30), transparent 62%),
+
+    /* teal cloud top-right */
+    radial-gradient(circle at 82% 15%, rgba(56, 189, 248, 0.24), transparent 60%),
+
+    /* deeper space shadow lower-right to keep contrast */
+    radial-gradient(circle at 78% 80%, rgba(15, 23, 42, 0.85), transparent 75%);
+}
 
 
     
