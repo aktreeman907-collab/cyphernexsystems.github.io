@@ -109,7 +109,8 @@
         <!-- Wreath Top Right (Desktop) -->
         <div class="absolute top-8 right-8 opacity-90 hidden md:block">
             <div class="relative w-20 h-20 border-4 border-green-700 rounded-full border-dashed flex items-center justify-center filter drop-shadow-[0_0_15px_rgba(20,83,45,0.8)]">
-                <div className="absolute -top-3 text-red-500 text-3xl">🎀</div>
+                <div class="absolute -top-3 text-red-500 text-3xl">🎀</div>
+
                 <div class="w-full h-full rounded-full border-4 border-green-500 opacity-50 absolute animate-pulse"></div>
             </div>
         </div>
@@ -281,16 +282,17 @@
                 </div>
                 
                 <div class="flex flex-wrap gap-2 mt-6">
-                    <button class="border border-white/15 text-[#f9fbff] px-4 py-2 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 text-sm">
-                        <i data-lucide="play" class="w-4 h-4"></i> Read Aloud
-                    </button>
-                    <button class="border border-white/15 text-[#f9fbff] px-4 py-2 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 text-sm">
-                        <i data-lucide="square" class="w-4 h-4"></i> Stop
-                    </button>
-                    <button onclick="window.print()" class="border border-white/15 text-[#f9fbff] px-4 py-2 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 text-sm">
-                        <i data-lucide="printer" class="w-4 h-4"></i> Print / Save PDF
-                    </button>
-                </div>
+              <button id="btn-read" class="border border-white/15 text-[#f9fbff] px-4 py-2 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 text-sm">
+                  <i data-lucide="play" class="w-4 h-4"></i> Read Aloud
+              </button>
+              <button id="btn-stop" class="border border-white/15 text-[#f9fbff] px-4 py-2 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 text-sm">
+                  <i data-lucide="square" class="w-4 h-4"></i> Stop
+              </button>
+              <button onclick="window.print()" class="border border-white/15 text-[#f9fbff] px-4 py-2 rounded-full hover:bg-white/5 transition-all flex items-center gap-2 text-sm">
+                  <i data-lucide="printer" class="w-4 h-4"></i> Print / Save PDF
+              </button>
+            </div>
+
             </section>
 
             <!-- Library Section -->
@@ -502,6 +504,69 @@
         if(type === 'dragon') box.innerText = "Far away, in the Cloud Kingdom, a little dragon named Spark could not breathe fire...";
       }
 
+      // Text-to-Speech Logic
+      const readBtn = document.getElementById('btn-read');
+      const stopBtn = document.getElementById('btn-stop');
+      const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+      let activeUtterance = null;
+
+      const setSpeechButtonState = (isSpeaking) => {
+        const disabledClasses = ['opacity-60', 'cursor-not-allowed'];
+
+        readBtn.disabled = !speechSupported || isSpeaking;
+        stopBtn.disabled = !speechSupported || !isSpeaking;
+
+        [readBtn, stopBtn].forEach((btn) => {
+          if (!btn) return;
+          if (btn.disabled) {
+            disabledClasses.forEach(c => btn.classList.add(c));
+          } else {
+            disabledClasses.forEach(c => btn.classList.remove(c));
+          }
+        });
+      };
+
+      const readStoryAloud = () => {
+        const box = document.getElementById('story-box');
+        const text = box.innerText.trim();
+
+        if (!speechSupported) {
+          box.innerText = 'Speech synthesis is not supported in this browser. Please try Chrome, Edge, or Safari to use Read Aloud.';
+          return;
+        }
+
+        if (!text || text.startsWith('Your bedtime story will appear here')) {
+          box.innerText = 'Please generate or pick a story first, then tap Read Aloud.';
+          return;
+        }
+
+        if (window.speechSynthesis.speaking) {
+          window.speechSynthesis.cancel();
+        }
+
+        activeUtterance = new SpeechSynthesisUtterance(text);
+        activeUtterance.rate = 0.95;
+        activeUtterance.pitch = 1;
+        activeUtterance.onend = () => setSpeechButtonState(false);
+        activeUtterance.onerror = () => setSpeechButtonState(false);
+
+        window.speechSynthesis.speak(activeUtterance);
+        setSpeechButtonState(true);
+      };
+
+      const stopStoryAloud = () => {
+        if (!speechSupported) return;
+        window.speechSynthesis.cancel();
+        setSpeechButtonState(false);
+      };
+
+      if (readBtn && stopBtn) {
+        readBtn.addEventListener('click', readStoryAloud);
+        stopBtn.addEventListener('click', stopStoryAloud);
+        setSpeechButtonState(false);
+      }
+
+        
       // 3. Galaxy Engine (Canvas)
       const canvas = document.getElementById('galaxy-canvas');
       const ctx = canvas.getContext('2d');
