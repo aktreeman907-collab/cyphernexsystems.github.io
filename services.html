@@ -4,126 +4,216 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CypherNex Systems | Services</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --black: #07090C;
-  --carbon: #0F1419;
-  --stone: #1A2128;
-  --silver: #A8B3BD;
-  --ash: #D6DADF;
-  --blue: #5E7FA3;
-  --blue-soft: #7A98B8;
-  --red: #8E2A24;
+:root{
+--black:#07090C;
+--carbon:#0F1419;
+--stone:#1A2128;
+--silver:#A8B3BD;
+--ash:#E6E4E0;
+
+--blue:#5E7FA3;
+--blue-soft:#7A98B8;
+
+--red:#8E2A24;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family:'Inter',sans-serif;
-  color:var(--ash);
-  background:
-    radial-gradient(circle at 20% 10%, rgba(94,127,163,0.35), transparent 40%),
-    radial-gradient(circle at 80% 15%, rgba(255,255,255,0.06), transparent 25%),
-    linear-gradient(180deg,#10161d 0%,#0a0f14 60%,#07090C 100%);
+font-family:'Inter',sans-serif;
+color:var(--ash);
+line-height:1.6;
+
+/* 🌕 Moonlit shift */
+background:
+radial-gradient(circle at 20% 10%, rgba(94,127,163,0.45), transparent 40%),
+radial-gradient(circle at 80% 15%, rgba(255,255,255,0.07), transparent 25%),
+linear-gradient(180deg,#111821 0%,#0a0f14 50%,#07090C 100%);
 }
 
 .container{width:90%;max-width:1200px;margin:auto}
 
 /* NAV */
 header{
-  position:sticky;top:0;z-index:100;
-  background:rgba(7,9,12,0.7);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(255,255,255,0.05);
+position:sticky;
+top:0;
+z-index:100;
+background:rgba(7,9,12,0.7);
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.nav{display:flex;justify-content:space-between;align-items:center;height:70px}
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+height:70px;
+}
 
-.nav a{color:var(--silver);text-decoration:none;margin:0 10px;position:relative}
+.nav a{
+color:var(--silver);
+text-decoration:none;
+margin-left:20px;
+position:relative;
+font-size:14px;
+}
 
+/* 🔴 ACTIVE EMBER LINE */
 .nav a.active::after{
-  content:"";
-  position:absolute;
-  bottom:-6px;
-  left:0;
-  width:100%;
-  height:2px;
-  background:linear-gradient(90deg, transparent, var(--red), transparent);
-  box-shadow:0 0 8px rgba(142,42,36,0.7);
+content:"";
+position:absolute;
+bottom:-6px;
+left:0;
+width:100%;
+height:2px;
+background:linear-gradient(90deg,transparent,var(--red),transparent);
+box-shadow:0 0 10px rgba(142,42,36,0.9);
 }
 
 /* HERO */
-.hero{padding:100px 0}
-.hero h1{font-size:48px;max-width:600px}
-.hero p{margin:20px 0;color:#c8d0d8}
-
-/* SECTION */
-.section{padding:80px 0}
-.section.alt-blue{
-  background:linear-gradient(180deg, rgba(94,127,163,0.15), transparent);
-}
-.section.alt-red{
-  background:linear-gradient(180deg, rgba(142,42,36,0.12), transparent);
+.hero{
+padding:110px 0 80px;
 }
 
+.hero h1{
+font-size:52px;
+max-width:650px;
+}
+
+.hero p{
+margin-top:20px;
+color:#c9d2da;
+max-width:600px;
+}
+
+/* SECTION BASE */
+.section{
+padding:80px 0;
+}
+
+/* 🔵 BLUE ZONE */
+.section.blue{
+background:
+linear-gradient(180deg, rgba(94,127,163,0.18), transparent);
+}
+
+/* 🔴 RED ZONE */
+.section.red{
+background:
+linear-gradient(180deg, rgba(142,42,36,0.14), transparent);
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+margin-top:30px;
+}
+
+/* CARD */
 .card{
-  background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-  border:1px solid rgba(255,255,255,0.1);
-  padding:25px;
-  border-radius:20px;
-  transition:0.3s;
+background:
+linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+border-radius:20px;
+padding:25px;
+border:1px solid rgba(255,255,255,0.08);
+transition:0.3s;
 }
 
 .card.blue{border-color:rgba(94,127,163,0.4)}
 .card.red{border-color:rgba(142,42,36,0.4)}
 
 .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 0 25px rgba(94,127,163,0.3);
+transform:translateY(-6px);
+box-shadow:0 0 30px rgba(94,127,163,0.25);
 }
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+/* HEADINGS */
+h2{
+font-size:32px;
+margin-bottom:10px;
+}
 
-/* BLADE */
+p{color:#c5ccd3}
+
+/* PROCESS */
+.steps{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-top:30px;
+}
+
+/* CTA */
+.cta{
+padding:60px;
+border-radius:25px;
+background:
+linear-gradient(180deg, rgba(94,127,163,0.18), rgba(255,255,255,0.03));
+border:1px solid rgba(94,127,163,0.3);
+margin-top:40px;
+}
+
+/* ⚔️ BLADE (IMPROVED) */
 .blade{
-  margin:80px auto;
-  width:80%;
-  height:80px;
-  position:relative;
+margin:100px auto;
+width:80%;
+height:100px;
+position:relative;
+overflow:hidden;
 }
 
 .blade::before{
-  content:"";
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:linear-gradient(90deg,
-    rgba(255,255,255,0.3),
-    rgba(255,255,255,0.1),
-    rgba(0,0,0,0)
-  );
-  filter:blur(10px);
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:
+linear-gradient(90deg,
+rgba(255,255,255,0.25),
+rgba(255,255,255,0.05),
+rgba(0,0,0,0)
+);
+filter:blur(12px);
+opacity:0.7;
 }
 
 .blade::after{
-  content:"";
-  position:absolute;
-  width:60%;
-  height:1px;
-  top:50%;
-  left:20%;
-  background:linear-gradient(90deg, transparent, var(--red), transparent);
-  box-shadow:0 0 12px rgba(142,42,36,0.8);
+content:"";
+position:absolute;
+width:70%;
+height:1px;
+top:50%;
+left:10%;
+background:
+linear-gradient(90deg,
+transparent,
+rgba(142,42,36,0.9),
+transparent
+);
+box-shadow:0 0 14px rgba(142,42,36,0.9);
 }
 
-footer{padding:40px;text-align:center;color:var(--silver)}
+/* FOOTER */
+footer{
+padding:40px;
+text-align:center;
+color:var(--silver);
+}
 </style>
 </head>
+
 <body>
 
 <header>
 <div class="container nav">
 <div>CypherNex Systems</div>
+
 <div>
 <a href="/">Home</a>
 <a href="/services.html" class="active">Services</a>
@@ -132,45 +222,99 @@ footer{padding:40px;text-align:center;color:var(--silver)}
 </div>
 </header>
 
+<!-- HERO -->
 <section class="hero container">
 <h1>AI Systems. Built for Your Workflow.</h1>
 <p>We design, implement, and optimize AI-powered systems that reduce workload, increase output, and make your tools work together.</p>
 </section>
 
-<section class="section alt-blue">
-<div class="container grid">
+<!-- SERVICES -->
+<section class="section blue">
+<div class="container">
+<h2>Core Services</h2>
+
+<div class="grid">
 <div class="card blue">
-<h3>AI Setup</h3>
-<p>Get AI working properly from day one.</p>
+<h3>AI Setup & Implementation</h3>
+<p>Get AI working properly from day one, structured around your real use case.</p>
 </div>
+
 <div class="card blue">
-<h3>Automation</h3>
-<p>Eliminate repetitive work.</p>
+<h3>Automation Systems</h3>
+<p>Eliminate repetitive work and streamline your daily operations.</p>
 </div>
+
 <div class="card blue">
 <h3>Multi-AI Systems</h3>
-<p>Structured AI workflows and roles.</p>
+<p>Structured collaboration between multiple models for stronger output.</p>
+</div>
 </div>
 </div>
 </section>
 
-<section class="section alt-red">
-<div class="container grid">
+<section class="section red">
+<div class="container">
+<h2>Extended Capabilities</h2>
+
+<div class="grid">
 <div class="card red">
-<h3>Marketing Systems</h3>
-<p>Automated presence and outreach.</p>
+<h3>Marketing Automation</h3>
+<p>Build consistent presence and increase reach without constant effort.</p>
 </div>
+
 <div class="card red">
-<h3>Integration</h3>
-<p>Connect tools into one system.</p>
+<h3>Tool Integration</h3>
+<p>Connect platforms and systems into a single working flow.</p>
 </div>
+
 <div class="card red">
 <h3>Custom Workflows</h3>
-<p>Built around how you operate.</p>
+<p>Everything is built around how you operate—not generic templates.</p>
+</div>
 </div>
 </div>
 </section>
 
+<!-- PROCESS -->
+<section class="section blue">
+<div class="container">
+<h2>How It Works</h2>
+
+<div class="steps">
+<div class="card blue">
+<h3>1. Understand</h3>
+<p>We identify friction points and inefficiencies.</p>
+</div>
+
+<div class="card blue">
+<h3>2. Design</h3>
+<p>We map the system using the right tools and structure.</p>
+</div>
+
+<div class="card blue">
+<h3>3. Build</h3>
+<p>We implement everything into a working system.</p>
+</div>
+
+<div class="card blue">
+<h3>4. Refine</h3>
+<p>We optimize until it runs clean and efficiently.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+<div class="container">
+<div class="cta">
+<h2>Let’s build it properly.</h2>
+<p>If you’re ready to stop piecing things together and start running a system that actually works—let’s talk.</p>
+</div>
+</div>
+</section>
+
+<!-- BLADE -->
 <div class="blade"></div>
 
 <footer>
