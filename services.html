@@ -656,6 +656,56 @@
       .hero-actions { flex-direction: column; }
       .node-area { min-height: 520px; }
     }
+    /* ===== CYTHERNEX SERVICES ENHANCED VISUAL LAYER ===== */
+
+/* Stronger blue presence */
+.hero {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(62, 83, 102, 0.28), transparent 35%),
+    radial-gradient(circle at 85% 5%, rgba(255,255,255,0.04), transparent 20%);
+}
+
+/* Service cards get steel-blue edge + glow */
+.service-card {
+  border: 1px solid rgba(62, 83, 102, 0.25);
+}
+
+.service-card:hover {
+  border-color: rgba(62, 83, 102, 0.45);
+  box-shadow:
+    0 20px 48px rgba(0,0,0,0.35),
+    0 0 18px rgba(62, 83, 102, 0.25);
+}
+
+/* Section separator tone shift */
+.section:nth-of-type(3) {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(62, 83, 102, 0.08),
+      rgba(10, 14, 18, 0)
+    );
+}
+
+/* Panels get subtle steel tint */
+.statement-panel,
+.pricing-panel,
+.cta-panel {
+  border: 1px solid rgba(62, 83, 102, 0.22);
+}
+
+/* Buttons feel more alive */
+.btn-primary {
+  box-shadow:
+    0 10px 30px rgba(40, 56, 70, 0.35),
+    0 0 12px rgba(62, 83, 102, 0.2);
+}
+
+.btn-primary:hover {
+  box-shadow:
+    0 14px 36px rgba(40, 56, 70, 0.4),
+    0 0 18px rgba(62, 83, 102, 0.35);
+}
   </style>
 </head>
 <body>
