@@ -706,6 +706,107 @@
     0 14px 36px rgba(40, 56, 70, 0.4),
     0 0 18px rgba(62, 83, 102, 0.35);
 }
+    /* ===== SERVICES PAGE VISUAL SHIFT V2 ===== */
+
+/* Cooler overall page atmosphere */
+body {
+  background:
+    radial-gradient(circle at 18% 10%, rgba(62, 83, 102, 0.24), transparent 26%),
+    radial-gradient(circle at 82% 12%, rgba(155,163,170,0.06), transparent 18%),
+    linear-gradient(180deg, #10161d 0%, #0a0f14 42%, #080b0f 100%);
+}
+
+/* Hero gets a noticeably cooler systems tone */
+.hero {
+  background:
+    radial-gradient(circle at 20% 12%, rgba(62, 83, 102, 0.34), transparent 32%),
+    linear-gradient(180deg, rgba(18, 27, 36, 0.55), rgba(8, 11, 15, 0));
+}
+
+/* Sharper, cooler visual block on right */
+.hero-visual {
+  border: 1px solid rgba(92, 118, 140, 0.34);
+  background:
+    radial-gradient(circle at top right, rgba(62,83,102,0.30), transparent 22%),
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    linear-gradient(180deg, #18212b 0%, #0c1218 100%);
+  box-shadow:
+    0 16px 50px rgba(0,0,0,0.38),
+    0 0 30px rgba(62,83,102,0.18);
+}
+
+/* Make the main service section feel like a different zone */
+#services {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(62, 83, 102, 0.12),
+      rgba(12, 16, 21, 0.02) 40%,
+      rgba(8, 11, 15, 0) 100%
+    );
+}
+
+/* Stronger card identity */
+.service-card {
+  border: 1px solid rgba(92, 118, 140, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02)),
+    linear-gradient(135deg, rgba(62,83,102,0.08), transparent 45%);
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(110, 140, 165, 0.55);
+  box-shadow:
+    0 22px 54px rgba(0,0,0,0.36),
+    0 0 24px rgba(62,83,102,0.28);
+}
+
+/* Headings get a little more silver presence */
+h2, h3 {
+  color: #f0eeea;
+}
+
+/* Eyebrow line becomes more obviously steel-blue */
+.eyebrow::before {
+  background: linear-gradient(90deg, rgba(92,118,140,0.95), rgba(230,228,224,0.24));
+}
+
+/* Make process + pricing panels cooler and more distinct */
+.step-card,
+.category-card,
+.pricing-panel,
+.statement-panel,
+.cta-panel {
+  border: 1px solid rgba(92, 118, 140, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
+    linear-gradient(135deg, rgba(62,83,102,0.05), transparent 55%);
+}
+
+/* Buttons become more clearly "services mode" */
+.btn-primary {
+  background: linear-gradient(180deg, rgba(92, 118, 140, 0.42), rgba(49, 66, 80, 0.62));
+  border-color: rgba(155,163,170,0.24);
+  box-shadow:
+    0 12px 34px rgba(40, 56, 70, 0.40),
+    0 0 16px rgba(62, 83, 102, 0.24);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, rgba(102, 131, 156, 0.52), rgba(54, 72, 88, 0.72));
+  box-shadow:
+    0 16px 38px rgba(40, 56, 70, 0.44),
+    0 0 24px rgba(62, 83, 102, 0.34);
+}
+
+/* Make footer blade area slightly more visible without ruining subtlety */
+.blade-wrap {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(127,136,145,0.18), transparent 34%),
+    linear-gradient(90deg, rgba(24,28,33,0) 0%, rgba(72,79,88,0.30) 18%, rgba(118,126,136,0.48) 50%, rgba(64,70,78,0.28) 78%, rgba(17,20,25,0) 100%),
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+}
   </style>
 </head>
 <body>
