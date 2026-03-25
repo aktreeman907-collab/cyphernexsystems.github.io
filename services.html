@@ -1,1110 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CypherNex Systems | Services</title>
-  <meta name="description" content="AI systems, automation, workflow integration, implementation, and digital presence services by CypherNex Systems." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --obsidian: #07090C;
-      --carbon: #0F1419;
-      --steel: #2B3036;
-      --silver: #9BA3AA;
-      --ash: #E6E4E0;
-      --slate-blue-steel: #3E5366;
-      --ember: #7A1E19;
-      --mist-silver: #7f8891;
-      --fog-gray: #666f77;
-      --panel: rgba(255,255,255,0.035);
-      --panel-strong: rgba(255,255,255,0.05);
-      --line: rgba(230, 228, 224, 0.1);
-      --line-soft: rgba(155, 163, 170, 0.15);
-      --blue-glow: rgba(62, 83, 102, 0.35);
-      --shadow: 0 16px 50px rgba(0, 0, 0, 0.38);
-      --radius-lg: 28px;
-      --radius-md: 20px;
-      --radius-sm: 14px;
-      --max: 1240px;
-      --transition: 220ms ease;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      color: var(--ash);
-      line-height: 1.65;
-      background:
-        radial-gradient(circle at 14% 12%, rgba(62, 83, 102, 0.16), transparent 26%),
-        radial-gradient(circle at 88% 8%, rgba(255,255,255,0.04), transparent 18%),
-        linear-gradient(180deg, #0b0f13 0%, #080b0f 38%, #0b1015 100%);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.07;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(140deg, rgba(255,255,255,0.04), transparent 35%, rgba(255,255,255,0.015) 60%, transparent 100%);
-      background-size: 36px 36px, 36px 36px, 100% 100%;
-      mix-blend-mode: soft-light;
-    }
-
-    a { color: inherit; text-decoration: none; }
-
-    .container {
-      width: min(calc(100% - 2rem), var(--max));
-      margin: 0 auto;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(16px);
-      background: rgba(7, 9, 12, 0.72);
-      border-bottom: 1px solid rgba(230,228,224,0.06);
-    }
-
-    .nav {
-      min-height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
-        linear-gradient(145deg, #131a22, #0a0f14);
-      border: 1px solid rgba(230,228,224,0.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), var(--shadow);
-      color: var(--ash);
-      font-size: 0.95rem;
-    }
-
-    .brand-text small {
-      display: block;
-      color: var(--silver);
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.15rem;
-      color: var(--silver);
-      font-size: 0.96rem;
-    }
-
-    .nav-links a:hover { color: var(--ash); }
-
-    .nav-cta {
-      display: inline-flex;
-      gap: 0.7rem;
-      align-items: center;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.55rem;
-      min-height: 48px;
-      padding: 0 1.15rem;
-      border-radius: 999px;
-      font-weight: 600;
-      transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
-      border: 1px solid transparent;
-      cursor: pointer;
-    }
-
-    .btn:hover { transform: translateY(-1px); }
-
-    .btn-primary {
-      background: linear-gradient(180deg, rgba(84, 112, 137, 0.28), rgba(50, 69, 84, 0.4));
-      border-color: rgba(155, 163, 170, 0.18);
-      box-shadow: 0 10px 30px rgba(40, 56, 70, 0.35);
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(180deg, rgba(92, 121, 146, 0.38), rgba(56, 76, 92, 0.5));
-      box-shadow: 0 14px 36px rgba(40, 56, 70, 0.4);
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.02);
-      border-color: rgba(230,228,224,0.12);
-      color: var(--ash);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(230,228,224,0.22);
-    }
-
-    .hero {
-      padding: 6.25rem 0 4rem;
-      position: relative;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.04fr 0.96fr;
-      gap: 1.6rem;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      margin-bottom: 1.2rem;
-      color: var(--silver);
-      font-size: 0.84rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 36px;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(62,83,102,0.9), rgba(230,228,224,0.18));
-    }
-
-    h1, h2, h3, h4 {
-      margin: 0;
-      line-height: 1.08;
-      letter-spacing: -0.03em;
-    }
-
-    h1 {
-      font-size: clamp(2.4rem, 6vw, 4.7rem);
-      max-width: 11ch;
-    }
-
-    h2 {
-      font-size: clamp(1.7rem, 3vw, 2.7rem);
-    }
-
-    .lead {
-      color: #cbc7c1;
-      font-size: clamp(1.04rem, 1.9vw, 1.18rem);
-      max-width: 60ch;
-      margin: 1.2rem 0 1.65rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-points {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.85rem;
-      margin-top: 1.35rem;
-    }
-
-    .point {
-      padding: 1rem;
-      border: 1px solid var(--line-soft);
-      border-radius: 16px;
-      background: rgba(255,255,255,0.03);
-      color: #d6d2cb;
-      font-size: 0.93rem;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-    }
-
-    .hero-visual {
-      position: relative;
-      border-radius: 28px;
-      min-height: 470px;
-      overflow: hidden;
-      border: 1px solid rgba(155,163,170,0.16);
-      background:
-        radial-gradient(circle at top right, rgba(62,83,102,0.18), transparent 24%),
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
-        linear-gradient(180deg, #121922 0%, #0b1015 100%);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-visual::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      opacity: 0.16;
-      background:
-        linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 48%, transparent 100%),
-        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.04) 100%);
-      mix-blend-mode: screen;
-      pointer-events: none;
-    }
-
-    .hero-visual-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.1rem;
-      border-bottom: 1px solid rgba(155,163,170,0.12);
-      color: var(--silver);
-      font-size: 0.9rem;
-    }
-
-    .dots { display: flex; gap: 0.38rem; }
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.13);
-    }
-
-    .node-area {
-      position: relative;
-      padding: 1.2rem;
-      height: calc(100% - 58px);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .workflow-card {
-      position: relative;
-      border-radius: 20px;
-      border: 1px solid rgba(155,163,170,0.13);
-      background: rgba(255,255,255,0.035);
-      padding: 1rem;
-      min-height: 170px;
-    }
-
-    .workflow-card h3 {
-      font-size: 1rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .mini-tag {
-      display: inline-flex;
-      font-size: 0.72rem;
-      border-radius: 999px;
-      padding: 0.28rem 0.58rem;
-      color: #dfe5ea;
-      background: rgba(62,83,102,0.22);
-      border: 1px solid rgba(91,113,132,0.35);
-      margin-bottom: 0.7rem;
-    }
-
-    .line {
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      margin: 0.55rem 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .line::after {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: var(--w, 70%);
-      background: linear-gradient(90deg, rgba(255,255,255,0.24), rgba(78,101,122,0.24));
-      border-radius: inherit;
-    }
-
-    .connection {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .connection svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .section {
-      padding: 4rem 0;
-      position: relative;
-    }
-
-    .section-header {
-      display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      align-items: start;
-    }
-
-    .section-header p {
-      color: #cbc7c1;
-      margin: 0;
-      max-width: 62ch;
-    }
-
-    .statement-panel,
-    .service-card,
-    .category-card,
-    .step-card,
-    .pricing-panel,
-    .cta-panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
-      border: 1px solid var(--line-soft);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), var(--shadow);
-    }
-
-    .statement-panel {
-      padding: 1.45rem;
-      border-radius: var(--radius-lg);
-    }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    .service-card {
-      padding: 1.35rem;
-      border-radius: 22px;
-      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(62,83,102,0.08), transparent 35%, rgba(255,255,255,0.02) 70%, transparent 100%);
-      opacity: 0;
-      transition: opacity var(--transition);
-      pointer-events: none;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(155,163,170,0.24);
-      box-shadow: 0 20px 48px rgba(0,0,0,0.35);
-      background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025));
-    }
-
-    .service-card:hover::before { opacity: 1; }
-
-    .service-card h3 {
-      font-size: 1.08rem;
-      margin-bottom: 0.45rem;
-    }
-
-    .service-tag {
-      display: inline-flex;
-      margin-bottom: 0.8rem;
-      font-size: 0.7rem;
-      border-radius: 999px;
-      padding: 0.3rem 0.58rem;
-      background: rgba(62,83,102,0.18);
-      color: #dce3e8;
-      border: 1px solid rgba(155,163,170,0.18);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .service-card p, .service-card li,
-    .category-card p, .category-card li,
-    .step-card p,
-    .pricing-panel p,
-    .statement-panel p,
-    .cta-panel p {
-      color: #cbc7c1;
-    }
-
-    .service-list {
-      margin: 0.95rem 0 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 0.65rem;
-    }
-
-    .service-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.7rem;
-    }
-
-    .service-list li::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      margin-top: 0.52rem;
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(155,163,170,0.95), rgba(62,83,102,0.9));
-      box-shadow: 0 0 16px rgba(62,83,102,0.28);
-      flex: none;
-    }
-
-    .category-grid,
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    .category-card,
-    .step-card {
-      padding: 1.3rem;
-      border-radius: 22px;
-    }
-
-    .step-number {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      margin-bottom: 0.9rem;
-      background: linear-gradient(180deg, rgba(62,83,102,0.32), rgba(62,83,102,0.18));
-      color: var(--ash);
-      font-weight: 700;
-      border: 1px solid rgba(155,163,170,0.18);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-    }
-
-    .pricing-panel,
-    .cta-panel {
-      border-radius: 28px;
-      padding: 1.8rem;
-    }
-
-    .pricing-panel {
-      background:
-        radial-gradient(circle at top right, rgba(62,83,102,0.16), transparent 24%),
-        linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
-    }
-
-    .pricing-meta {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.85rem;
-      margin-top: 1.2rem;
-    }
-
-    .meta-chip {
-      border-radius: 16px;
-      border: 1px solid rgba(155,163,170,0.16);
-      background: rgba(255,255,255,0.03);
-      padding: 0.95rem;
-      color: #d7d3cd;
-      font-size: 0.95rem;
-    }
-
-    .cta-panel {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.2rem;
-      background:
-        radial-gradient(circle at top right, rgba(62,83,102,0.18), transparent 24%),
-        linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
-    }
-
-    .blade-moment {
-      padding: 2.5rem 0 1rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .blade-wrap {
-      position: relative;
-      height: 86px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(127,136,145,0.14), transparent 32%),
-        linear-gradient(90deg, rgba(24,28,33,0) 0%, rgba(61,66,73,0.28) 18%, rgba(105,112,120,0.42) 50%, rgba(58,63,70,0.26) 78%, rgba(17,20,25,0) 100%),
-        linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.008));
-      border: 1px solid rgba(155,163,170,0.09);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
-    }
-
-    .blade-wrap::before {
-      content: "";
-      position: absolute;
-      left: 12%;
-      right: 12%;
-      top: 50%;
-      height: 1px;
-      transform: translateY(-50%);
-      background:
-        linear-gradient(90deg,
-          rgba(255,255,255,0) 0%,
-          rgba(188,194,199,0.22) 24%,
-          rgba(230,228,224,0.52) 49%,
-          rgba(188,194,199,0.18) 71%,
-          rgba(255,255,255,0) 100%);
-      box-shadow: 0 0 18px rgba(230,228,224,0.08);
-    }
-
-    .blade-wrap::after {
-      content: "";
-      position: absolute;
-      left: 18%;
-      right: 18%;
-      top: calc(50% + 2px);
-      height: 1px;
-      transform: translateY(-50%);
-      background:
-        linear-gradient(90deg,
-          rgba(122,30,25,0) 0%,
-          rgba(122,30,25,0.04) 30%,
-          rgba(122,30,25,0.14) 50%,
-          rgba(122,30,25,0.03) 70%,
-          rgba(122,30,25,0) 100%);
-      filter: blur(0.2px);
-    }
-
-    .footer {
-      padding: 1.4rem 0 3rem;
-      color: var(--silver);
-      font-size: 0.95rem;
-    }
-
-    .footer-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      border-top: 1px solid rgba(230,228,224,0.06);
-      padding-top: 1.25rem;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 540ms ease, transform 540ms ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 1040px) {
-      .hero-grid,
-      .section-header,
-      .service-grid,
-      .category-grid,
-      .steps-grid,
-      .pricing-meta {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-points {
-        grid-template-columns: 1fr;
-      }
-
-      .cta-panel,
-      .footer-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .node-area {
-        grid-template-columns: 1fr;
-        min-height: 460px;
-      }
-    }
-
-    @media (max-width: 820px) {
-      .nav-links { display: none; }
-      .hero { padding-top: 5rem; }
-    }
-
-    @media (max-width: 640px) {
-      .nav-cta .btn-secondary { display: none; }
-      .btn { width: 100%; }
-      .hero-actions { flex-direction: column; }
-      .node-area { min-height: 520px; }
-    }
-    /* ===== CYTHERNEX SERVICES ENHANCED VISUAL LAYER ===== */
-
-/* Stronger blue presence */
-.hero {
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CypherNex Systems | Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #07090C;
+  --carbon: #0F1419;
+  --stone: #1A2128;
+  --silver: #A8B3BD;
+  --ash: #D6DADF;
+  --blue: #5E7FA3;
+  --blue-soft: #7A98B8;
+  --red: #8E2A24;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',sans-serif;
+  color:var(--ash);
   background:
-    radial-gradient(circle at 20% 10%, rgba(62, 83, 102, 0.28), transparent 35%),
-    radial-gradient(circle at 85% 5%, rgba(255,255,255,0.04), transparent 20%);
+    radial-gradient(circle at 20% 10%, rgba(94,127,163,0.35), transparent 40%),
+    radial-gradient(circle at 80% 15%, rgba(255,255,255,0.06), transparent 25%),
+    linear-gradient(180deg,#10161d 0%,#0a0f14 60%,#07090C 100%);
 }
 
-/* Service cards get steel-blue edge + glow */
-.service-card {
-  border: 1px solid rgba(62, 83, 102, 0.25);
+.container{width:90%;max-width:1200px;margin:auto}
+
+/* NAV */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(7,9,12,0.7);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.service-card:hover {
-  border-color: rgba(62, 83, 102, 0.45);
-  box-shadow:
-    0 20px 48px rgba(0,0,0,0.35),
-    0 0 18px rgba(62, 83, 102, 0.25);
+.nav{display:flex;justify-content:space-between;align-items:center;height:70px}
+
+.nav a{color:var(--silver);text-decoration:none;margin:0 10px;position:relative}
+
+.nav a.active::after{
+  content:"";
+  position:absolute;
+  bottom:-6px;
+  left:0;
+  width:100%;
+  height:2px;
+  background:linear-gradient(90deg, transparent, var(--red), transparent);
+  box-shadow:0 0 8px rgba(142,42,36,0.7);
 }
 
-/* Section separator tone shift */
-.section:nth-of-type(3) {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(62, 83, 102, 0.08),
-      rgba(10, 14, 18, 0)
-    );
+/* HERO */
+.hero{padding:100px 0}
+.hero h1{font-size:48px;max-width:600px}
+.hero p{margin:20px 0;color:#c8d0d8}
+
+/* SECTION */
+.section{padding:80px 0}
+.section.alt-blue{
+  background:linear-gradient(180deg, rgba(94,127,163,0.15), transparent);
+}
+.section.alt-red{
+  background:linear-gradient(180deg, rgba(142,42,36,0.12), transparent);
 }
 
-/* Panels get subtle steel tint */
-.statement-panel,
-.pricing-panel,
-.cta-panel {
-  border: 1px solid rgba(62, 83, 102, 0.22);
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.1);
+  padding:25px;
+  border-radius:20px;
+  transition:0.3s;
 }
 
-/* Buttons feel more alive */
-.btn-primary {
-  box-shadow:
-    0 10px 30px rgba(40, 56, 70, 0.35),
-    0 0 12px rgba(62, 83, 102, 0.2);
+.card.blue{border-color:rgba(94,127,163,0.4)}
+.card.red{border-color:rgba(142,42,36,0.4)}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 25px rgba(94,127,163,0.3);
 }
 
-.btn-primary:hover {
-  box-shadow:
-    0 14px 36px rgba(40, 56, 70, 0.4),
-    0 0 18px rgba(62, 83, 102, 0.35);
-}
-    /* ===== SERVICES PAGE VISUAL SHIFT V2 ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
 
-/* Cooler overall page atmosphere */
-body {
-  background:
-    radial-gradient(circle at 18% 10%, rgba(62, 83, 102, 0.24), transparent 26%),
-    radial-gradient(circle at 82% 12%, rgba(155,163,170,0.06), transparent 18%),
-    linear-gradient(180deg, #10161d 0%, #0a0f14 42%, #080b0f 100%);
+/* BLADE */
+.blade{
+  margin:80px auto;
+  width:80%;
+  height:80px;
+  position:relative;
 }
 
-/* Hero gets a noticeably cooler systems tone */
-.hero {
-  background:
-    radial-gradient(circle at 20% 12%, rgba(62, 83, 102, 0.34), transparent 32%),
-    linear-gradient(180deg, rgba(18, 27, 36, 0.55), rgba(8, 11, 15, 0));
+.blade::before{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0.3),
+    rgba(255,255,255,0.1),
+    rgba(0,0,0,0)
+  );
+  filter:blur(10px);
 }
 
-/* Sharper, cooler visual block on right */
-.hero-visual {
-  border: 1px solid rgba(92, 118, 140, 0.34);
-  background:
-    radial-gradient(circle at top right, rgba(62,83,102,0.30), transparent 22%),
-    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
-    linear-gradient(180deg, #18212b 0%, #0c1218 100%);
-  box-shadow:
-    0 16px 50px rgba(0,0,0,0.38),
-    0 0 30px rgba(62,83,102,0.18);
+.blade::after{
+  content:"";
+  position:absolute;
+  width:60%;
+  height:1px;
+  top:50%;
+  left:20%;
+  background:linear-gradient(90deg, transparent, var(--red), transparent);
+  box-shadow:0 0 12px rgba(142,42,36,0.8);
 }
 
-/* Make the main service section feel like a different zone */
-#services {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(62, 83, 102, 0.12),
-      rgba(12, 16, 21, 0.02) 40%,
-      rgba(8, 11, 15, 0) 100%
-    );
-}
-
-/* Stronger card identity */
-.service-card {
-  border: 1px solid rgba(92, 118, 140, 0.28);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02)),
-    linear-gradient(135deg, rgba(62,83,102,0.08), transparent 45%);
-}
-
-.service-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(110, 140, 165, 0.55);
-  box-shadow:
-    0 22px 54px rgba(0,0,0,0.36),
-    0 0 24px rgba(62,83,102,0.28);
-}
-
-/* Headings get a little more silver presence */
-h2, h3 {
-  color: #f0eeea;
-}
-
-/* Eyebrow line becomes more obviously steel-blue */
-.eyebrow::before {
-  background: linear-gradient(90deg, rgba(92,118,140,0.95), rgba(230,228,224,0.24));
-}
-
-/* Make process + pricing panels cooler and more distinct */
-.step-card,
-.category-card,
-.pricing-panel,
-.statement-panel,
-.cta-panel {
-  border: 1px solid rgba(92, 118, 140, 0.24);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
-    linear-gradient(135deg, rgba(62,83,102,0.05), transparent 55%);
-}
-
-/* Buttons become more clearly "services mode" */
-.btn-primary {
-  background: linear-gradient(180deg, rgba(92, 118, 140, 0.42), rgba(49, 66, 80, 0.62));
-  border-color: rgba(155,163,170,0.24);
-  box-shadow:
-    0 12px 34px rgba(40, 56, 70, 0.40),
-    0 0 16px rgba(62, 83, 102, 0.24);
-}
-
-.btn-primary:hover {
-  background: linear-gradient(180deg, rgba(102, 131, 156, 0.52), rgba(54, 72, 88, 0.72));
-  box-shadow:
-    0 16px 38px rgba(40, 56, 70, 0.44),
-    0 0 24px rgba(62, 83, 102, 0.34);
-}
-
-/* Make footer blade area slightly more visible without ruining subtlety */
-.blade-wrap {
-  background:
-    radial-gradient(circle at 50% 50%, rgba(127,136,145,0.18), transparent 34%),
-    linear-gradient(90deg, rgba(24,28,33,0) 0%, rgba(72,79,88,0.30) 18%, rgba(118,126,136,0.48) 50%, rgba(64,70,78,0.28) 78%, rgba(17,20,25,0) 100%),
-    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-}
-  </style>
+footer{padding:40px;text-align:center;color:var(--silver)}
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container nav">
-      <a href="/" class="brand" aria-label="CypherNex Systems home">
-        <span class="brand-mark">CX</span>
-        <span class="brand-text">
-          CypherNex Systems
-          <small>Services</small>
-        </span>
-      </a>
 
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="/">Home</a>
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="#pricing">Approach</a>
-        <a href="mailto:admin@cyphernexsystems.com">Contact</a>
-      </nav>
+<header>
+<div class="container nav">
+<div>CypherNex Systems</div>
+<div>
+<a href="/">Home</a>
+<a href="/services.html" class="active">Services</a>
+<a href="mailto:admin@cyphernexsystems.com">Contact</a>
+</div>
+</div>
+</header>
 
-      <div class="nav-cta">
-        <a class="btn btn-secondary" href="/">Back Home</a>
-        <a class="btn btn-primary" href="#contact">Get Started</a>
-      </div>
-    </div>
-  </header>
+<section class="hero container">
+<h1>AI Systems. Built for Your Workflow.</h1>
+<p>We design, implement, and optimize AI-powered systems that reduce workload, increase output, and make your tools work together.</p>
+</section>
 
-  <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="reveal">
-          <div class="eyebrow">Services</div>
-          <h1>AI Systems. Built for Your Workflow.</h1>
-          <p class="lead">We design, implement, and optimize AI-powered systems that reduce workload, increase output, and make your tools work together.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#contact">Get Started</a>
-            <a class="btn btn-secondary" href="#services">Request a Setup</a>
-          </div>
-          <div class="hero-points">
-            <div class="point">Implementation using the tools you already have—or the right ones to add</div>
-            <div class="point">Workflow design built around how you actually operate</div>
-            <div class="point">Practical automation for business, projects, and everyday life</div>
-          </div>
-        </div>
+<section class="section alt-blue">
+<div class="container grid">
+<div class="card blue">
+<h3>AI Setup</h3>
+<p>Get AI working properly from day one.</p>
+</div>
+<div class="card blue">
+<h3>Automation</h3>
+<p>Eliminate repetitive work.</p>
+</div>
+<div class="card blue">
+<h3>Multi-AI Systems</h3>
+<p>Structured AI workflows and roles.</p>
+</div>
+</div>
+</section>
 
-        <div class="hero-visual reveal" aria-label="Workflow systems visual preview">
-          <div class="hero-visual-top">
-            <div class="dots">
-              <span class="dot"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
-            </div>
-            <span>System design overview</span>
-          </div>
+<section class="section alt-red">
+<div class="container grid">
+<div class="card red">
+<h3>Marketing Systems</h3>
+<p>Automated presence and outreach.</p>
+</div>
+<div class="card red">
+<h3>Integration</h3>
+<p>Connect tools into one system.</p>
+</div>
+<div class="card red">
+<h3>Custom Workflows</h3>
+<p>Built around how you operate.</p>
+</div>
+</div>
+</section>
 
-          <div class="node-area">
-            <div class="workflow-card">
-              <span class="mini-tag">Inputs</span>
-              <h3>Tools & Platforms</h3>
-              <div class="line" style="--w:82%"></div>
-              <div class="line" style="--w:68%"></div>
-              <div class="line" style="--w:76%"></div>
-              <div class="line" style="--w:59%"></div>
-            </div>
-            <div class="workflow-card">
-              <span class="mini-tag">Logic</span>
-              <h3>Automation Layer</h3>
-              <div class="line" style="--w:84%"></div>
-              <div class="line" style="--w:63%"></div>
-              <div class="line" style="--w:74%"></div>
-              <div class="line" style="--w:61%"></div>
-            </div>
-            <div class="workflow-card">
-              <span class="mini-tag">Execution</span>
-              <h3>AI + Workflows</h3>
-              <div class="line" style="--w:79%"></div>
-              <div class="line" style="--w:71%"></div>
-              <div class="line" style="--w:54%"></div>
-              <div class="line" style="--w:77%"></div>
-            </div>
-            <div class="workflow-card">
-              <span class="mini-tag">Outcome</span>
-              <h3>Output & Efficiency</h3>
-              <div class="line" style="--w:88%"></div>
-              <div class="line" style="--w:73%"></div>
-              <div class="line" style="--w:66%"></div>
-              <div class="line" style="--w:81%"></div>
-            </div>
+<div class="blade"></div>
 
-            <div class="connection" aria-hidden="true">
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M25,27 C38,27 38,27 50,27" fill="none" stroke="rgba(155,163,170,0.18)" stroke-width="0.4"/>
-                <path d="M50,27 C62,27 62,27 75,27" fill="none" stroke="rgba(62,83,102,0.28)" stroke-width="0.45"/>
-                <path d="M25,73 C38,73 38,73 50,73" fill="none" stroke="rgba(62,83,102,0.24)" stroke-width="0.45"/>
-                <path d="M50,73 C62,73 62,73 75,73" fill="none" stroke="rgba(155,163,170,0.18)" stroke-width="0.4"/>
-                <path d="M25,31 C25,46 25,54 25,69" fill="none" stroke="rgba(155,163,170,0.14)" stroke-width="0.35"/>
-                <path d="M75,31 C75,46 75,54 75,69" fill="none" stroke="rgba(155,163,170,0.14)" stroke-width="0.35"/>
-                <circle cx="50" cy="50" r="2.4" fill="rgba(230,228,224,0.18)" />
-                <circle cx="50" cy="50" r="0.85" fill="rgba(122,30,25,0.18)" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<footer>
+© CypherNex Systems
+</footer>
 
-    <section class="section">
-      <div class="container">
-        <div class="statement-panel reveal">
-          <div class="eyebrow">What this is</div>
-          <h2>Not Another Tool. A Working System.</h2>
-          <p style="margin-top: 1rem; max-width: 70ch;">Most people don’t need more tools. They need their existing tools to actually work together. That’s where we come in. We take AI platforms, automation tools, and workflows—and turn them into a system that fits how you operate.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="services">
-      <div class="container">
-        <div class="section-header reveal">
-          <h2>Core Services</h2>
-          <p>Built for practical use, configured around real workflows, and designed to reduce friction instead of creating more of it.</p>
-        </div>
-
-        <div class="service-grid">
-          <article class="service-card reveal">
-            <span class="service-tag">Setup</span>
-            <h3>AI Setup &amp; Implementation</h3>
-            <p>We help you get AI working properly from day one.</p>
-            <ul class="service-list">
-              <li>Model setup across OpenAI, Claude, Gemini, and compatible local models</li>
-              <li>Prompt structuring and system logic built around your use case</li>
-              <li>Workflow alignment that makes the tools usable in real life</li>
-            </ul>
-          </article>
-
-          <article class="service-card reveal">
-            <span class="service-tag">Automation</span>
-            <h3>Automation &amp; Workflow Systems</h3>
-            <p>We design systems that eliminate repetitive work.</p>
-            <ul class="service-list">
-              <li>Task automation for day-to-day operations and admin</li>
-              <li>Workflow chaining between tools and platforms</li>
-              <li>Custom logic to match the way you already operate</li>
-            </ul>
-          </article>
-
-          <article class="service-card reveal">
-            <span class="service-tag">Multi-AI</span>
-            <h3>Multi-AI System Design</h3>
-            <p>We build structured AI environments for stronger output and better decision flow.</p>
-            <ul class="service-list">
-              <li>Multi-model workflows with defined roles and responsibilities</li>
-              <li>Refinement pipelines that improve results before they reach you</li>
-              <li>Boardroom-style configurations for advanced AI collaboration</li>
-            </ul>
-          </article>
-
-          <article class="service-card reveal">
-            <span class="service-tag">Marketing</span>
-            <h3>Marketing &amp; Online Presence Automation</h3>
-            <p>We help you show up consistently and reach more people with less friction.</p>
-            <ul class="service-list">
-              <li>Content workflow automation and publishing systems</li>
-              <li>Brand consistency across platforms and channels</li>
-              <li>Lead flow optimization and streamlined outreach</li>
-            </ul>
-          </article>
-
-          <article class="service-card reveal" style="grid-column: 1 / -1;">
-            <span class="service-tag">Integration</span>
-            <h3>Tool Integration (Open Ecosystem)</h3>
-            <p>We don’t lock you into our tools. We work with what already exists—APIs, automation platforms, software you already use, and the systems you want to add—then connect it into something cohesive and productive.</p>
-            <ul class="service-list" style="grid-template-columns: repeat(2, 1fr); gap: 0.75rem 1rem;">
-              <li>Existing software and platforms</li>
-              <li>API-connected tools and services</li>
-              <li>Automation layers and workflow builders</li>
-              <li>Hybrid systems that combine AI, logic, and execution</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-header reveal">
-          <h2>Built for Real Use Cases</h2>
-          <p>This isn’t only for businesses. It’s for anyone who wants AI to be useful, grounded, and worth the effort.</p>
-        </div>
-
-        <div class="category-grid">
-          <article class="category-card reveal">
-            <h3>Businesses</h3>
-            <p>For owners and operators who want to reduce wasted motion, tighten operations, and scale with systems instead of chaos.</p>
-          </article>
-          <article class="category-card reveal">
-            <h3>Builders</h3>
-            <p>For people creating new tools, products, or workflows who need implementation support, systems design, or multi-tool integration.</p>
-          </article>
-          <article class="category-card reveal">
-            <h3>Everyday People</h3>
-            <p>For individuals who want to automate the parts of life that can be automated so they can reclaim time and put it where it matters.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="process">
-      <div class="container">
-        <div class="section-header reveal">
-          <h2>Simple Process</h2>
-          <p>We keep the engagement straightforward: understand the workflow, design the system, build it properly, and refine it until it runs clean.</p>
-        </div>
-
-        <div class="steps-grid">
-          <article class="step-card reveal">
-            <div class="step-number">1</div>
-            <h3>Understand Your Workflow</h3>
-            <p>We look at how you currently operate and identify where friction, repetition, or breakdowns are happening.</p>
-          </article>
-          <article class="step-card reveal">
-            <div class="step-number">2</div>
-            <h3>Design the System</h3>
-            <p>We map out the structure using the right mix of tools, logic, and AI where it actually makes sense.</p>
-          </article>
-          <article class="step-card reveal">
-            <div class="step-number">3</div>
-            <h3>Build &amp; Implement</h3>
-            <p>We connect the moving parts, configure the system, and make sure the pieces work together as intended.</p>
-          </article>
-          <article class="step-card reveal">
-            <div class="step-number">4</div>
-            <h3>Refine &amp; Optimize</h3>
-            <p>We adjust based on actual use so the final result feels practical, stable, and worth keeping.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="pricing">
-      <div class="container">
-        <div class="pricing-panel reveal">
-          <div class="eyebrow">Approach</div>
-          <h2>Flexible Based on Scope</h2>
-          <p style="margin-top: 1rem; max-width: 72ch;">Every system is different. Some setups are simple. Others involve more tools, more automation, and more customization. We price based on what is actually required—not a one-size-fits-all package that ignores the real work.</p>
-          <div class="pricing-meta">
-            <div class="meta-chip">Complexity of the system</div>
-            <div class="meta-chip">Number of tools involved</div>
-            <div class="meta-chip">Level of customization needed</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="cta-panel reveal">
-          <div>
-            <div class="eyebrow">Next step</div>
-            <h2>Let’s build it properly.</h2>
-            <p>If you’re ready to stop piecing things together and start running a system that actually supports the way you work, let’s talk through what you need and map it out.</p>
-          </div>
-          <div class="hero-actions" style="margin: 0; width: min(100%, 320px);">
-            <a class="btn btn-primary" href="mailto:admin@cyphernexsystems.com">Contact Us</a>
-            <a class="btn btn-secondary" href="/">Back Home</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="blade-moment" aria-hidden="true">
-      <div class="container">
-        <div class="blade-wrap"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-row">
-      <span>© <span id="year"></span> CypherNex Systems. All rights reserved.</span>
-      <span>Built with quiet authority, operational clarity, and human intent.</span>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-  </script>
 </body>
 </html>
